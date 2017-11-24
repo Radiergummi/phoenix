@@ -1,0 +1,12 @@
+{
+  "name": "vue-documentation-generator",
+  "version": "0.0.1",
+  "dependencies": {
+    "fs-extra": "^4.0.2",
+    "glob": "^7.1.2",
+    "glob-promise": "^3.3.0",
+    "jsdoc-x": "^2.0.0",
+    "merge-options": "^1.0.0",
+    "vue-docgen-api": "^2.1.6"
+  }
+}
