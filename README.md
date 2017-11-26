@@ -41,14 +41,15 @@ Phoenix consists of five core building blocks:
    bucket, a database or a git repository.
    
 5. **Documents**  
-   The Document object is an abstract representation of the documentation. Similar to the document 
-   in browsers, it is a tree structure with infinitely nested nodes. This makes it possible to 
-   document even the biggest projects cleanly. 
+   The Document object is an abstract representation of the documentation. Similar to the document
+   in browsers, it is a tree structure with infinitely nested nodes. This makes it possible to
+   document even the biggest projects cleanly.
 
 Therefore, the chain works as follows:
 > **read input** → **parse input** → **transform AST** → **write output**  
 
-PhoenixPhoenix makes it possible to document just about anything, as long as it can be parsed using JavaScript.
+Phoenix makes it possible to document just about anything, as long as it can be parsed using 
+JavaScript.
 
 
 Core principles
