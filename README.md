@@ -22,28 +22,37 @@ Phoenix consists of five core building blocks:
 1. **Readers**
    Readers are the first step in the chain: They *read source files*, obviously. By default, there 
    are only readers for STDIN and the file system, though you could create additional ones to read 
-   from a deployment server, an HTTP resource or a Github repository.
+   from a deployment server, an HTTP resource or a Github repository.  
+   [Continue reading...](./lib/reader/README.md)
    
 2. **Parsers**  
    A parser *parses source code* and returns it as a *JavaScript representation*. It's sole 
    responsibility is to analyze the code passed to it as a string and return a `Document` (more on 
    that below). You might note this is not limited to JavaScript source: 
-   A parser can parse any language.
+   A parser can parse any language.  
+   [Continue reading...](./lib/parser/README.md)
+
 
 3. **Transformers**  
    A transformer takes the previously generated document object and
    *transforms them into an output format*.  
-   This might be HTML, XML, Markdown or even binary ASCII code if that's your thing.
+   This might be HTML, XML, Markdown or even binary ASCII code if that's your thing.  
+   [Continue reading...](./lib/transformer/README.md)
+
 
 4. **Writers**  
    A writer takes the output data and *writes it to a target*. By default, as with readers there are
    only writers for STDOUT and the file system, but you could easily create one that writes to an S3
-   bucket, a database or a git repository.
+   bucket, a database or a git repository.  
+   [Continue reading...](./lib/writer/README.md)
+
    
 5. **Documents**  
    The Document object is an abstract representation of the documentation. Similar to the document
    in browsers, it is a tree structure with infinitely nested nodes. This makes it possible to
-   document even the biggest projects cleanly.
+   document even the biggest projects cleanly.  
+   [Continue reading...](#documents)
+
 
 Therefore, the chain works as follows:
 > **read input** → **parse input** → **transform AST** → **write output**  
