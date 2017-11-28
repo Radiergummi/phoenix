@@ -5,6 +5,6 @@
  *
  */
 
-const init = require('./lib/cli');
+const init = require('../lib/cli');
 
 init();
