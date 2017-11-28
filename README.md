@@ -230,5 +230,5 @@ Contributing
 ------------
 Contributions are welcome at any time. If you're experiencing a problem with Phoenix, please 
 [create a new issue](https://github.com/Radiergummi/phoenix/issues/new).  
-Before submitting a new pull request, please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details 
-on our code of conduct and the process for submitting pull requests.
+Before submitting a new pull request, please read [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for 
+details on our code of conduct and the process for submitting pull requests.
