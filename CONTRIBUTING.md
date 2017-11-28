@@ -8,11 +8,15 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 Pull Request Process
 --------------------
-1. Update the README.md or documentation with details of changes to usage, configuration or any 
+1. Make sure all files modified by you adhere to the formatting rules outlined in the .editorconfig 
+   and pass the `eslint` process. You can run ESLint using `npm run lint`.
+2. Update the README.md or documentation with details of changes to usage, configuration or any 
    other API change.
-2. Increase the version numbers in any examples files and the README.md to the new version that this
+3. Make sure all tests pass properly and add tests if your pull request adds a feature or changes an
+   existing one.
+4. Increase the version numbers in any examples files and the README.md to the new version that this
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the sign-off of another developer, or if you 
+5. You may merge the Pull Request in once you have the sign-off of another developer, or if you 
    do not have permission to do that, you may request the reviewer to merge it for you.
 
 
