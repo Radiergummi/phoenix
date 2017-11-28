@@ -3,7 +3,32 @@ Contributing
 When contributing to this repository, please first discuss the change you wish to make via issue,
 email, or any other method with the owners of this repository before making a change. 
 
-Please note we have a code of conduct, please follow it in all your interactions with the project.
+Please note we have a [code of conduct](#code-of-conduct), please follow it in all your interactions
+with the project.
+
+### How to submit issues
+Please follow the below points:
+- Check if bug is consistent in different environments
+- Check if its been reported and solved in the Anchor forum
+- **Check if there is an issue that already covers or relates to it** (including closed issues)
+- Give an accurate and concise title to issue
+- Prefix title of issue with `Bug:` or `Feature:`
+- Explain bug briefly but in detail
+- Give guidance on how to reproduce bug
+- Add screenshots when possible
+- Follow the templates that autofill the editor - **failure to follow the template will result in 
+  closure of the issue without resolution**
+
+
+Pull Request naming
+-------------------
+Please name your pull request branches according to the following scheme: 
+
+**New features**
+`feature/what-it-is`
+
+**Bug fixes**
+`bugfix/what-it-fixes`
 
 
 Pull Request Process
@@ -76,7 +101,9 @@ temporary or permanent repercussions as determined by other members of the proje
 
 ### Attribution
 This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4, available at
-[http://contributor-covenant.org/version/1/4][version]
+[http://contributor-covenant.org/version/1/4][version]; Some of it has been blatantly stolen from 
+the ingenious [AnchorCMS][anchor].
 
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/
+[anchor]: https://github.com/anchorcms/anchor-cms
