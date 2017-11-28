@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+/**
+ * This script is a simple wrapper around the CLI file to make it callable from the shell.
+ *
+ */
+
+const init = require('./lib/cli');
+
+init();
