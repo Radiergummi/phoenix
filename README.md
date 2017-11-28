@@ -74,22 +74,27 @@ Core principles
 5. **Stability**: New versions should follow Semver strictly and deprecate things slowly.
 
 
-Documents
----------
-What would be the best way to maintain an output agnostic data format for documentation? It's 
-already in there: A `Document`. And yes, it's similar to your everyday browser document, just a 
-little stripped down and optimized for the use case.  
-The Document object resembles a tree structure that holds nested document nodes. There is a basic
-preset of different node types, but you can of course create new node types based on the existing.
-The task of a transformer is to transform the document nodes into the output nodes. Consider this:
-A `section` node might directly map to the `<section>` tag, while in markdown, it's just a new line.
-An Overview of the `Document` API can be found in the 
-[Document API documentation](./lib/document/README.md).
+Installation
+------------
+> Note: Phoenix is currently in initial development and not ready for use at the moment. If you plan
+to contribute, please have a look at the [Contributing section](#contributing).
+
+Install the module:
+
+```bash
+// from the npm registry
+npm install phoenix-docs
+
+// from Github
+npm install Radiergummi/phoenix
+```
 
 
 Usage
 -----
-By default, the only thing required is calling `run()` on a configured Phoenix instance. That will read the input and write documentation output. If you want to customize, whoever, the API is at your hands at all times in the build process.
+By default, the only thing required is calling `run()` on a configured Phoenix instance. That will 
+read the input and write documentation output. If you want to customize, whoever, the API is at your
+hands at all times in the build process.
 The API is available in two flavors: Either *event based* or *promise based*.
 Every module is obliged to return a promise and emit events at certain points in the flow. You are 
 not bound to one, of course: Promises and events mix just fine.
@@ -133,6 +138,20 @@ phoenix.on('read:after', sourceFilesContent => console.log(sourceFilesContent));
 phoenix.run();
 ```
 
+
+Documents
+---------
+What would be the best way to maintain an output agnostic data format for documentation? It's 
+already in there: A `Document`. And yes, it's similar to your everyday browser document, just a 
+little stripped down and optimized for the use case.  
+The Document object resembles a tree structure that holds nested document nodes. There is a basic
+preset of different node types, but you can of course create new node types based on the existing.
+The task of a transformer is to transform the document nodes into the output nodes. Consider this:
+A `section` node might directly map to the `<section>` tag, while in markdown, it's just a new line.
+An Overview of the `Document` API can be found in the 
+[Document API documentation](./lib/document/README.md).
+
+
 #### Event list
 **This section is, as the whole project, still a work in progress.**
 
@@ -173,7 +192,43 @@ example, should a transform module that creates XML output (*"FoobarXMLTransform
 `newNode` event, it would be emitted like so: `transform:foobarxmltransformer:newNode`.
 
 
-Current thoughts
-================
+Terminology
+===========
+Phoenix uses several terms that might sound unfamiliar at first. This is necessary to distinguish 
+between several states the subject code can take and to stay technology agnostic.
 
-- Reader -> Parser -> Transformer -> Formatter -> Writer?
+### Origin
+An *origin* is a place to pull [sources](#source) from. This might be a file path, a database 
+connection or a remote URI.
+   
+### Source
+A *source* is an object representing a code fragment. At minimum, it has two properties: `name` and 
+`code`, where `name` is the source identifier (for example a file path) and `code` is the actual 
+source code that is subject to documentation.
+   
+### AST
+*AST* is an abbreviation for *Abstract Syntax Tree*. It represents the abstract structure of any 
+kind of source code. You can read more on the topic over at 
+[Wikipedia](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
+
+### Documentation object
+In lieu of a better word, I decided to call transformed documentation snippets (already in their
+target output format) *objects*. This might be subject to change, though.  
+An *object* refers to a [document node](#node) that holds transformed documentation text.
+
+### Node
+*Nodes* represent a single branch in the tree structure of a [document](#document). They can hold 
+children nodes themselves and are roughly comparable to the 
+[Browser node object](https://developer.mozilla.org/en/docs/Web/API/Node).
+
+### Document
+The *Document* class is the heart of Phoenix. The whole process of reading, parsing, transforming 
+and writing code and documentation focuses on modifying a single `document` instance that holds the
+origins, sources, documentation objects and output fragments.
+
+Contributing
+------------
+Contributions are welcome at any time. If you're experiencing a problem with Phoenix, please 
+[create a new issue](https://github.com/Radiergummi/phoenix/issues/new).  
+Before submitting a new pull request, please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details 
+on our code of conduct and the process for submitting pull requests.
