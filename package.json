@@ -2,6 +2,7 @@
   "name": "phoenix",
   "version": "0.0.1",
   "dependencies": {
+    "commander": "^2.12.1",
     "fs-extra": "^4.0.2",
     "glob": "^7.1.2",
     "glob-promise": "^3.3.0",
