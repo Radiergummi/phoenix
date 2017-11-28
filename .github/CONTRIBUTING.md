@@ -8,8 +8,7 @@ interactions with the project.
 
 ### How to submit issues
 Please follow the below points:
-- Check if bug is consistent in different environments
-- Check if its been reported and solved in the Anchor forum
+- Check if bug is consistent in different environments and with minimal required configuration
 - **Check if there is an issue that already covers or relates to it** (including closed issues)
 - Give an accurate and concise title to issue
 - Prefix title of issue with `Bug:` or `Feature:`
