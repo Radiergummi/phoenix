@@ -8,3 +8,15 @@ Any Writer can provide a list of types it supports, defaulting to all of them. W
 
 All readers have two sources of input available to them: First and foremost, the documentation objects. The FileSystemWriter, for example, simply iterates and writes them to output files and directories. Due to the objects being `Node`s, they can be nested and will result in a directory tree.  
 However, as all other modules, Writers also receive the current `document` and can use it to perform additional operations.
+
+
+Ideas for writers
+-----------------
+Possible writers to include in Phoenix:
+
+ - SFTPWriter
+ - FTPWriter
+ - S3Writer
+ - GitWriter
+ - GitHubWriter
+ - SQLWriter

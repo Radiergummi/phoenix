@@ -53,3 +53,15 @@ class, though. Take a look at the [Reader source](./Reader.js) to stay API compl
 |:---------:|-----------|-----------------------|--------------------------------------------------|
 | `read`    | none      | `Promise.<[string]>` | Inherited from `Reader`. Calls `_invoke`          |
 | `_invoke` | none      | `Promise.<[string]>` | Starts the reading process. Must return a promise |
+
+
+Ideas for readers
+-----------------
+Possible readers to include in Phoenix:
+
+ - SFTPReader
+ - FTPReader
+ - S3Reader
+ - GitReader
+ - GitHubReader
+ - SQLReader
