@@ -1,5 +1,6 @@
 module.exports = {
   origins:          './lib/**/*.js',
   FileSystemReader: {},
-  StdInReader:      {}
+  StdInReader:      {},
+  JSDocParser:      {}
 };
