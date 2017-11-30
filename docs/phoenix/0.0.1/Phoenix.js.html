@@ -33,22 +33,17 @@
  require
  */
 
-/**
- * Main Phoenix classes
- * @namespace Phoenix
- */
-
-const EventEmitter = require( 'events' ).EventEmitter;
-const mergeOptions = require( 'merge-options' ),
+const EventEmitter = require( 'events' ),
+      mergeOptions = require( 'merge-options' ),
       packageJson  = require( '../package.json' );
 
 const Document = require( './document/Document' );
 
 /**
- * It is mainly used by the CLI application but can be easily implemented
- * programmatically: Just `require` this file and create a new instance. Additionally, you can adapt
- * it for your company or project by inheriting and adjusting the default options, if you'd like to.
- * That spares you from having to use a configuration file.
+ * It is mainly used by the CLI application but can be easily implemented programmatically: Just
+ * `require` this file and create a new instance. Additionally, you can adapt it for your company or
+ * project by inheriting and adjusting the default options, if you'd like to. That spares you from
+ * having to use a configuration file.
  *
  * @module
  * @extends EventEmitter
@@ -149,8 +144,8 @@ class Phoenix extends EventEmitter {
   /**
    * parses a set of sources
    *
-   * @param  {Array.&lt;string>} sources
-   * @param  {object}         [options]
+   * @param  {Array.&lt;string>}     sources
+   * @param  {object}             [options]
    * @return {Promise.&lt;string[]>}
    */
   parse ( sources, options ) {
@@ -227,13 +222,13 @@ module.exports = Phoenix;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="Documents.Elements.Comment.html">Comment</a></li><li><a href="Documents.Elements.Element.html">Element</a></li><li><a href="Documents.Elements.Link.html">Link</a></li><li><a href="Documents.Elements.Paragraph.html">Paragraph</a></li><li><a href="Documents.Elements.Table.html">Table</a></li><li><a href="Documents.Elements.Text.html">Text</a></li><li><a href="Documents.Node.html">Node</a></li><li><a href="Documents.Page.html">Page</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="Parsers.JSDocParser.html">JSDocParser</a></li><li><a href="Parsers.Parser.html">Parser</a></li><li><a href="Parsers.VueComponentParser.html">VueComponentParser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Phoenix.Writers.FileSystemWriter.html">FileSystemWriter</a></li><li><a href="Phoenix.Writers.StdOutWriter.html">StdOutWriter</a></li><li><a href="Phoenix.Writers.Writer.html">Writer</a></li><li><a href="Readers.FileSystemReader.html">FileSystemReader</a></li><li><a href="Readers.Reader.html">Reader</a></li><li><a href="Readers.StdInReader.html">StdInReader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="Text.html">Text</a></li><li><a href="Transformers.HtmlTransformer.html">HtmlTransformer</a></li><li><a href="Transformers.MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Transformers.Transformer.html">Transformer</a></li><li><a href="Utility.html">Utility</a></li></ul><h3>Namespaces</h3><ul><li><a href="Documents.html">Documents</a></li><li><a href="Documents.Elements.html">Elements</a></li><li><a href="Parsers.html">Parsers</a></li><li><a href="Phoenix.Writers.html">Writers</a></li><li><a href="Readers.html">Readers</a></li><li><a href="Transformers.html">Transformers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="ChildlessElement.html">ChildlessElement</a></li><li><a href="Comment.html">Comment</a></li><li><a href="Document.html">Document</a></li><li><a href="Element.html">Element</a></li><li><a href="FileSystemReader.html">FileSystemReader</a></li><li><a href="FileSystemWriter.html">FileSystemWriter</a></li><li><a href="HorizontalRule.html">HorizontalRule</a></li><li><a href="HtmlTransformer.html">HtmlTransformer</a></li><li><a href="JSDocParser.html">JSDocParser</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="Link.html">Link</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Node.html">Node</a></li><li><a href="Page.html">Page</a></li><li><a href="Paragraph.html">Paragraph</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Reader.html">Reader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="StdInReader.html">StdInReader</a></li><li><a href="StdOutWriter.html">StdOutWriter</a></li><li><a href="Table.html">Table</a></li><li><a href="TableCell.html">TableCell</a></li><li><a href="TableHeader.html">TableHeader</a></li><li><a href="TableHeaderCell.html">TableHeaderCell</a></li><li><a href="TableRow.html">TableRow</a></li><li><a href="TableRowCell.html">TableRowCell</a></li><li><a href="Text.html">Text</a></li><li><a href="Transformer.html">Transformer</a></li><li><a href="Utility.html">Utility</a></li><li><a href="VueComponentParser.html">VueComponentParser</a></li><li><a href="Writer.html">Writer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#basePath">basePath</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Thu Nov 30 2017 22:31:15 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Fri Dec 01 2017 00:18:41 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
