@@ -1,58 +1,59 @@
 {
-  "name":            "phoenix",
-  "version":         "0.0.1",
-  "description":     "A lightweight and modular framework to document code projects",
-  "keywords":        [
+  "name": "phoenix",
+  "version": "0.0.1",
+  "description": "A lightweight and modular framework to document code projects",
+  "keywords": [
     "phoenix",
     "documentation",
     "docs"
   ],
-  "homepage":        "https://github.com/Radiergummi/phoenix",
-  "license":         "MIT",
-  "author":          {
-    "name":  "Moritz Friedrich",
+  "homepage": "https://github.com/Radiergummi/phoenix",
+  "license": "MIT",
+  "author": {
+    "name": "Moritz Friedrich",
     "email": "m@9dev.de",
-    "url":   "https://www.moritzfriedrich.com"
+    "url": "https://www.moritzfriedrich.com"
   },
-  "contributors":    [
+  "contributors": [
     {
-      "name":  "Craig Childs",
-      "url":   "http://craigchilds.me",
+      "name": "Craig Childs",
+      "url": "http://craigchilds.me",
       "email": "childscraig17@gmail.com"
     }
   ],
-  "repository":      {
+  "repository": {
     "type": "git",
-    "url":  "git+https://github.com/Radiergummi/phoenix.git"
+    "url": "git+https://github.com/Radiergummi/phoenix.git"
   },
-  "bugs":            {
+  "bugs": {
     "url": "https://github.com/Radiergummi/phoenix/issues"
   },
-  "engines":         {
+  "engines": {
     "node": ">=6.2.0"
   },
-  "main":            "index.js",
-  "directories":     {
-    "bin":     "./bin",
-    "lib":     "./lib",
-    "doc":     "./docs",
-    "test":    "./tests",
+  "main": "index.js",
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib",
+    "doc": "./docs",
+    "test": "./tests",
     "example": "./examples"
   },
-  "dependencies":    {
-    "commander":      "^2.12.1",
-    "fs-extra":       "^4.0.2",
-    "glob":           "^7.1.2",
-    "glob-promise":   "^3.3.0",
-    "jsdoc-x":        "^2.0.1",
-    "merge-options":  "^1.0.0",
+  "dependencies": {
+    "commander": "^2.12.1",
+    "fs-extra": "^4.0.2",
+    "glob": "^7.1.2",
+    "glob-promise": "^3.3.0",
+    "jsdoc-x": "^2.0.1",
+    "merge-options": "^1.0.0",
     "vue-docgen-api": "github:Radiergummi/vue-docgen-api"
   },
   "devDependencies": {
     "eslint": "^4.11.0"
   },
-  "scripts":         {
-    "lint":      "./node_modules/.bin/eslint ./lib/**/*.js",
-    "lint-init": "./node_modules/.bin/eslint --init"
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint ./lib/**/*.js",
+    "lint-init": "./node_modules/.bin/eslint --init",
+    "docs": "./node_modules/.bin/jsdoc -R ./README.md -P package.json -c ./.jsdocrc"
   }
 }
