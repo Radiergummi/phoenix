@@ -232,3 +232,16 @@ Contributions are welcome at any time. If you're experiencing a problem with Pho
 [create a new issue](https://github.com/Radiergummi/phoenix/issues/new).  
 Before submitting a new pull request, please read [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for 
 details on our code of conduct and the process for submitting pull requests.
+
+Attribution
+-----------
+Phoenix would not have been possible without the work of a lot of awesome people and open source 
+projects, way too many to mention.  
+There are some, however, that I'd like to mention specifically:
+
+ - [Craig](https://github.com/craigchilds94) for joining in right from the start!
+ - [onury](https://github.com/onury) from [jsdoc-x](https://github.com/onury/jsdoc-x) for providing 
+   an almost-instant change to the library's error output
+ - [rafaesc](https://github.com/rafaesc) from
+   [vue-docgen-api](https://github.com/vue-styleguidist/vue-docgen-api) for including a method to 
+   parse sources instead of files
