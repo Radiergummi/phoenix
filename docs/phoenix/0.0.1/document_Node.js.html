@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: document/Node.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: document/Node.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/**
+ * @name Document node
+ * @description Resembles a node in a document tree. It can be traversed and nested indefinitely.
+ *
+ * @property {string} id
+ * @class
+*/
+class Node {
+
+  /**
+   * creates a new Node
+   *
+   * @param {Node}   parentNode node's parent node
+   * @param {object} value      content of the node
+   * @param {string} id         node ID
+   */
+  constructor ( value = {}, id = '', parentNode = null ) {
+
+    /**
+     * the Nodes direct parent node
+     *
+     * @type {Node}
+     */
+    this._parentNode = parentNode;
+
+    /**
+     * Node ID
+     *
+     * @type {string}
+     */
+    this.id = (
+      id.length > 0
+        ? id
+        : Node.createNodeId( this.parentNode )
+    );
+
+    /**
+     * Node data
+     *
+     * @type {object}
+     */
+    this._value = value;
+
+    /**
+     * Children nodes
+     *
+     * @type {Array.&lt;Node>}
+     */
+    this.childNodes = [];
+  }
+
+  /**
+   * appends a new child to the node
+   *
+   * @param  {Node} node
+   * @return {Node}
+   */
+  appendChild ( node ) {
+    node.parentNode = this;
+    this.childNodes.push( node );
+
+    return node;
+  }
+
+  /**
+   * prepends a new child to the node
+   *
+   * @param  {Node} node
+   * @return {Node}
+   */
+  prependChild ( node ) {
+    node.parentNode = this;
+    this.childNodes.unshift( node );
+
+    return this;
+  }
+
+  /**
+   * removes a child node
+   *
+   * @param  {Node|number} node
+   * @return {*}
+   * @throws TypeError
+   */
+  removeChild ( node ) {
+    if ( typeof node === 'number' &amp;&amp; this.children[ node ] ) {
+      return this.childNodes.splice( node, 1 ).shift();
+    }
+
+    if ( node instanceof Node ) {
+      return Node._removeNode( node );
+    }
+
+    throw new TypeError( `Invalid argument ${node}` );
+  }
+
+  /**
+   * removes the node
+   *
+   * @return {*}
+   */
+  remove () {
+    return Node._removeNode( this );
+  }
+
+  /**
+   * traverse up the tree
+   *
+   * @param {function} iterator
+   */
+  traverseUp ( iterator ) {
+    return Node._traverse( this, iterator, Node._traverseUp );
+  }
+
+  /**
+   * traverse down the tree
+   *
+   * @param {function} iterator
+   */
+  traverseDown ( iterator ) {
+    return Node._traverse( this, iterator, Node._traverseDown );
+  }
+
+  /**
+   * finds a node in the tree
+   *
+   * @param  {Node|string|function} predicate either a Node, a node ID or a custom iterator
+   * @return {*}
+   */
+  find ( predicate ) {
+    let match = null,
+        iterator;
+
+    // handle a custom iterator function
+    if ( typeof predicate === 'function' ) {
+      iterator = predicate;
+    }
+
+    // handle a node ID
+    else if ( typeof predicate === 'string' ) {
+      iterator = node => {
+        if ( node.id === predicate ) {
+          match = node;
+
+          return false;
+        }
+      };
+    }
+
+    // handle a node instance
+    if ( predicate instanceof Node ) {
+      iterator = node => {
+        if ( node === predicate ) {
+          match = node;
+
+          return false;
+        }
+      };
+    }
+
+    this.traverseDown( node => {
+      if ( iterator.call( this, node ) ) {
+        match = node;
+
+        return false;
+      }
+    } );
+
+    return match;
+  }
+
+  /**
+   * retrieves all nodes of a certain type. Note: This traverses the node tree down, starting from
+   * the current node.
+   *
+   * @param  {string} nodeType type of the node, which is their constructor name
+   * @return {Array}
+   */
+  getElementsByNodeType ( nodeType ) {
+    let matches = [];
+
+    this.traverseDown( node => {
+      if ( node.nodeType === nodeType ) {
+        matches.push( node );
+      }
+    } );
+
+    return matches;
+  }
+
+  /**
+   * retrieves the root node
+   *
+   * @return {Node}
+   */
+  get rootNode () {
+    let node = this;
+
+    if ( !node.parentNode ) {
+      return this;
+    }
+
+    while ( node.parentNode ) {
+      node = node.parentNode;
+    }
+
+    return node;
+  }
+
+  /**
+   * proxy to the child node length
+   *
+   * @return {number}
+   */
+  get length () {
+    return this.childNodes.length;
+  }
+
+  /**
+   * retrieves the previous sibling node
+   *
+   * @return {Node}
+   */
+  get previousSibling () {
+    return this.parentNode.childNodes[ this.parentNode.childNodes.indexOf( this ) - 1 ];
+  }
+
+  /**
+   * retrieves the next sibling node
+   *
+   * @param node
+   * @return {*}
+   */
+  get nextSibling () {
+    return this.parentNode.childNodes[ this.parentNode.childNodes.indexOf( this ) + 1 ];
+  }
+
+  /**
+   * retrieves the first child node
+   *
+   * @return {*}
+   */
+  get firstChild () {
+    return this.childNodes[ 0 ];
+  }
+
+  /**
+   * retrieves the last child node
+   *
+   * @return {*}
+   */
+  get lastChild () {
+    return this.childNodes[ this.childNodes.length - 1 ];
+  }
+
+  /**
+   * checks whether this is a root node
+   *
+   * @return {boolean}
+   */
+  get isRootNode () {
+    return !this.parentNode;
+  }
+
+  /**
+   * retrieves the node value
+   *
+   * @return {object}
+   */
+  get nodeValue () {
+    return this._value;
+  }
+
+  /**
+   * sets the node value
+   * @param {object} value
+   */
+  set nodeValue ( value ) {
+    this._value = value;
+  }
+
+  /**
+   * retrieves the node depth
+   *
+   * @return {number}
+   */
+  get depth () {
+    return (
+      this.parentNode
+        ? this.parentNode.depth + 1
+        : 0
+    );
+  }
+
+  /**
+   * retrieves the nodes constructor name
+   */
+  get nodeType () {
+    return this.constructor.name;
+  }
+
+  /**
+   * retrieves the parent node
+   *
+   * @return {Node}
+   */
+  get parentNode () {
+    return this._parentNode;
+  }
+
+  /**
+   * sets the parent node
+   *
+   * @param {Node} node
+   */
+  set parentNode ( node ) {
+    this._parentNode = node;
+    this.id          = Node.createNodeId( this.parentNode );
+  }
+
+  /**
+   * retrieves all nodes as a flat array
+   *
+   * @return {Array}
+   */
+  toArray () {
+    const nodeList = [];
+
+    this.traverseDown( node => nodeList.push( node ) );
+
+    return nodeList;
+  }
+
+  /**
+   * traverses down the tree
+   *
+   * @param {Node}     context
+   * @param {function} iterator
+   * @private
+   */
+  static _traverseDown ( context, iterator ) {
+    let doContinue = true;
+
+    (/**
+     * walks down the node tree
+     *
+     * @param {Node} node
+     */
+    function walkDown ( node ) {
+      let newContext;
+
+      if ( !doContinue ) {
+        return;
+      }
+
+      if ( iterator( node ) === false ) {
+
+        //break the traversal loop if the iterator returns a falsy value
+        doContinue = false;
+      } else {
+        for ( let i = 0; i &lt; node.childNodes.length; i++ ) {
+          newContext = node.childNodes[ i ];
+          walkDown( newContext );
+        }
+      }
+    })( context );
+  }
+
+  /**
+   * traverses up the node tree
+   *
+   * @param {Node}     context
+   * @param {function} iterator
+   * @private
+   */
+  static _traverseUp ( context, iterator ) {
+    let node;
+
+    while ( context ) {
+      if ( iterator( context ) === false ) {
+        return;
+      }
+
+      for ( let i = 0; i &lt; context.childNodes.length; i++ ) {
+        node = context.childNodes[ i ];
+
+        if ( iterator( node ) === false ) {
+          return;
+        }
+      }
+
+      context = context.parentNode;
+    }
+  }
+
+  /**
+   * traverses the tree
+   *
+   * @param  {Node}     context
+   * @param  {function} iterator
+   * @param  {function} callback
+   * @return {*}
+   * @private
+   */
+  static _traverse ( context, iterator, callback ) {
+    const visited      = [],
+
+          /**
+           *
+           * @param  {Node} node
+           * @return {*}
+           */
+          callIterator = function ( node ) {
+            let id = node.id,
+                returned;
+
+            if ( !visited.includes( id ) ) {
+              returned = iterator.call( node, node );
+
+              visited.push( id );
+
+              if ( returned === false ) {
+                return returned;
+              }
+            }
+          };
+
+    return callback( context, callIterator );
+  }
+
+  /**
+   * removes a node from its parent
+   *
+   * @param  {Node} node
+   * @return {*}
+   * @private
+   */
+  static _removeNode ( node ) {
+    let parent = node.parentNode,
+        child;
+
+    for ( let i = 0; i &lt; parent.children.length; i++ ) {
+      child = parent.children[ i ];
+
+      if ( child === node ) {
+        return parent.children.splice( i, 1 ).shift();
+      }
+    }
+  }
+
+  /**
+   * creates a node ID from the current tree position
+   *
+   * @param  {Node}   parentNode
+   * @return {string}
+   */
+  static createNodeId ( parentNode = null ) {
+    return (parentNode
+        ? `${parentNode.id}:${parentNode.childNodes.length}`
+        : '0'
+    );
+  }
+}
+
+/**
+ * @type {Node}
+ */
+module.exports = Node;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Abstract%2520Module.html">Abstract Module</a></li><li><a href="Abstract%2520Parser%2520class.html">Abstract Parser class</a></li><li><a href="Abstract%2520Reader%2520class.html">Abstract Reader class</a></li><li><a href="Abstract%2520Transformer%2520class.html">Abstract Transformer class</a></li><li><a href="Abstract%2520Utility%2520class.html">Abstract Utility class</a></li><li><a href="Abstract%2520Writer%2520class.html">Abstract Writer class</a></li><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="Comment%2520element.html">Comment element</a></li><li><a href="Document.Page.html">Page</a></li><li><a href="Document%2520element.html">Document element</a></li><li><a href="Document%2520node.html">Document node</a></li><li><a href="Element.html">Element</a></li><li><a href="File%2520system%2520reader.html">File system reader</a></li><li><a href="Filesystem%2520Writer.html">Filesystem Writer</a></li><li><a href="FileSystemReader.html">FileSystemReader</a></li><li><a href="JSDoc%252520Parser.html">JSDoc Parser</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="Link.html">Link</a></li><li><a href="Link%2520Element.html">Link Element</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="Main%2520Phoenix%2520class.html">Main Phoenix class</a></li><li><a href="MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Node.html">Node</a></li><li><a href="Page.html">Page</a></li><li><a href="Paragraph.html">Paragraph</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Phoenix.Parser.html">Parser</a></li><li><a href="Phoenix.Reader.html">Reader</a></li><li><a href="Phoenix.Transformer.html">Transformer</a></li><li><a href="Phoenix.Writer.html">Writer</a></li><li><a href="Reader.html">Reader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="STDIN%2520reader.html">STDIN reader</a></li><li><a href="StdInReader.html">StdInReader</a></li><li><a href="Text.html">Text</a></li><li><a href="Text%2520element.html">Text element</a></li><li><a href="Writer.html">Writer</a></li></ul><h3>Namespaces</h3><ul><li><a href="Document.html">Document</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#basePath">basePath</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Thu Nov 30 2017 14:48:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: reader/FileSystemReader.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: reader/FileSystemReader.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/*
+ global module,
+ require
+ */
+
+const fs   = require( 'fs-extra' ),
+      glob = require( 'glob-promise' ),
+      path = require( 'path' );
+
+const Reader = require( './Reader' );
+
+/**
+ * @name File system reader
+ * @description Provides a Reader that can read paths from the local file system. It supports
+ * globbed patterns, supplied as a single glob string or an array of those.
+ *
+ * @see https://github.com/isaacs/node-glob#glob-primer
+ * @extends Reader
+ * @class
+*/
+class FileSystemReader extends Reader {
+
+  /**
+   * creates a new file system reader instance
+   *
+   * @param {Array|string} origins   file system paths to read. this supports `glob` patterns.
+   * @param {Document}     document  document instance
+   * @param {object}       [options]
+   */
+  constructor ( origins, document, options ) {
+    super( origins, document, options );
+
+    this.emit( 'read:init', {
+      reader: this
+    } );
+  }
+
+  /**
+   * invokes the file system reader
+   *
+   * @return {Promise.&lt;object>}
+   * @private
+   */
+  _invoke () {
+
+    // instantiate the `files` promise. Due to the reader accepting Arrays and strings, we'll need
+    // to perform type checking first.
+    let files = Promise.resolve();
+
+    // if origins is a string, we'll take it as the only path
+    if ( typeof this.origins === 'string' ) {
+      files = FileSystemReader._scanPath( this.origins );
+    }
+
+    // if origins is an array, we'll iterate over it
+    if ( Array.isArray( this.origins ) ) {
+      files = FileSystemReader._scanPaths( this.origins );
+    }
+
+    // map the file paths to their content
+    return files.then( paths => FileSystemReader._readFiles( paths ) );
+  }
+
+  /**
+   * scans a path for files or subdirectories
+   *
+   * @param  {string}          filePath path to scan
+   * @return {Promise.&lt;Array>}
+   * @private
+   */
+  static _scanPath ( filePath = '' ) {
+    // noinspection SpellCheckingInspection
+    return glob( filePath, { nodir: true } );
+  }
+
+  /**
+   * scans multiple paths for files or subdirectories
+   *
+   * @param  {Array}           paths origin paths to scan
+   * @return {Promise.&lt;Array>}       resolved file paths
+   * @private
+   */
+  static _scanPaths ( paths = [] ) {
+    const scannedPaths = paths
+      .map( path => FileSystemReader._scanPath( path ) );
+
+    return Promise
+      .all( scannedPaths )
+
+      // concatenate all file path arrays
+      .then( resolvedPaths => resolvedPaths.reduce( ( all, current ) => all.concat( current ), [] ) )
+
+      // remove duplicates
+      .then( resolvedPaths => Array.from( new Set( resolvedPaths ) ) );
+  }
+
+  /**
+   * reads a single file
+   *
+   * @param  {string}           filePath filesystem path for the file
+   * @return {Promise.&lt;string>}          Promise holding the file content
+   * @private
+   */
+  static _readFile ( filePath ) {
+    // noinspection JSUnresolvedFunction
+    return fs.readFile( filePath );
+  }
+
+  /**
+   * reads multiple files
+   *
+   * @param  {Array}            paths list of file paths to read
+   * @return {Promise.&lt;object>}       Promise holding an object that maps file paths to content
+   * @private
+   */
+  static _readFiles ( paths = [] ) {
+
+    // read all paths
+    const readPaths = paths.map( filePath => FileSystemReader._readFile( filePath ) );
+
+    return Promise.all( readPaths )
+
+      // reduce the paths into an object
+      .then( data => paths.map( ( filePath, index ) => ({
+        name:     filePath,
+        filename: path.basename( filePath ),
+        path:     path.resolve( path.dirname( filePath ) ),
+        code:     data[ index ].toString()
+      } ) ) );
+  }
+}
+
+module.exports = FileSystemReader;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Abstract%2520Module.html">Abstract Module</a></li><li><a href="Abstract%2520Parser%2520class.html">Abstract Parser class</a></li><li><a href="Abstract%2520Reader%2520class.html">Abstract Reader class</a></li><li><a href="Abstract%2520Transformer%2520class.html">Abstract Transformer class</a></li><li><a href="Abstract%2520Utility%2520class.html">Abstract Utility class</a></li><li><a href="Abstract%2520Writer%2520class.html">Abstract Writer class</a></li><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="Comment%2520element.html">Comment element</a></li><li><a href="Document.Page.html">Page</a></li><li><a href="Document%2520element.html">Document element</a></li><li><a href="Document%2520node.html">Document node</a></li><li><a href="Element.html">Element</a></li><li><a href="File%2520system%2520reader.html">File system reader</a></li><li><a href="Filesystem%2520Writer.html">Filesystem Writer</a></li><li><a href="FileSystemReader.html">FileSystemReader</a></li><li><a href="JSDoc%252520Parser.html">JSDoc Parser</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="Link.html">Link</a></li><li><a href="Link%2520Element.html">Link Element</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="Main%2520Phoenix%2520class.html">Main Phoenix class</a></li><li><a href="MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Node.html">Node</a></li><li><a href="Page.html">Page</a></li><li><a href="Paragraph.html">Paragraph</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Phoenix.Parser.html">Parser</a></li><li><a href="Phoenix.Reader.html">Reader</a></li><li><a href="Phoenix.Transformer.html">Transformer</a></li><li><a href="Phoenix.Writer.html">Writer</a></li><li><a href="Reader.html">Reader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="STDIN%2520reader.html">STDIN reader</a></li><li><a href="StdInReader.html">StdInReader</a></li><li><a href="Text.html">Text</a></li><li><a href="Text%2520element.html">Text element</a></li><li><a href="Writer.html">Writer</a></li></ul><h3>Namespaces</h3><ul><li><a href="Document.html">Document</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#basePath">basePath</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Thu Nov 30 2017 14:48:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

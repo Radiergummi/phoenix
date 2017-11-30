@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3>phoenix 0.0.1</h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Phoenix</h1><p><em>A lightweight and modular framework to document code projects</em></p>
+<h2>Reasoning</h2><p>Born out of frustration while working on a Vue.js project, I decided to write something on my own. 
+The amount of work to generate documentation for a simple project involving Vue.js components seemed
+tedious to me: While there are certain packages that parse single file components, it seemed near 
+impossible to get them to play nice with JSDoc or similar.<br>What lacks to date is a modular framework that clearly separates parsing sources from writing output
+files.  </p>
+<p>Welcome to Phoenix.</p>
+<h2>Abstract Concept</h2><p>Phoenix consists of five core building blocks:</p>
+<ol>
+<li><p><strong>Readers</strong>
+Readers are the first step in the chain: They <em>read source files</em>, obviously. By default, there 
+are only readers for STDIN and the file system, though you could create additional ones to read 
+from a deployment server, an HTTP resource or a Github repository.<br><a href="./lib/reader/README.md">Continue reading...</a></p>
+</li>
+<li><p><strong>Parsers</strong><br>A parser <em>parses source code</em> and returns it as a <em>JavaScript representation</em>. It's sole 
+responsibility is to analyze the code passed to it as a string and return a <code>Document</code> (more on 
+that below). You might note this is not limited to JavaScript source: 
+A parser can parse any language.<br><a href="./lib/parser/README.md">Continue reading...</a></p>
+</li>
+</ol>
+<ol>
+<li><strong>Transformers</strong><br>A transformer takes the previously generated document object and
+<em>transforms them into an output format</em>.<br>This might be HTML, XML, Markdown or even binary ASCII code if that's your thing.<br><a href="./lib/transformer/README.md">Continue reading...</a></li>
+</ol>
+<ol>
+<li><strong>Writers</strong><br>A writer takes the output data and <em>writes it to a target</em>. By default, as with readers there are
+only writers for STDOUT and the file system, but you could easily create one that writes to an S3
+bucket, a database or a git repository.<br><a href="./lib/writer/README.md">Continue reading...</a></li>
+</ol>
+<ol>
+<li><strong>Documents</strong><br>The Document object is an abstract representation of the documentation. Similar to the document
+in browsers, it is a tree structure with infinitely nested nodes. This makes it possible to
+document even the biggest projects cleanly.<br><a href="#documents">Continue reading...</a></li>
+</ol>
+<p>Therefore, the chain works as follows:</p>
+<blockquote>
+<p><strong>read input</strong> → <strong>parse input</strong> → <strong>transform AST</strong> → <strong>write output</strong>  </p>
+</blockquote>
+<p>Phoenix makes it possible to document just about anything, as long as it can be parsed using 
+JavaScript.</p>
+<h2>Core principles</h2><ol>
+<li><strong>Ease of use</strong>: For the 90% use case, you should be able to install phoenix, pass it an input
+path and get your documentation.</li>
+<li><strong>Modularity</strong>: Extending Phoenix should be as easy as extending one of the abstract classes and
+pass the name as an option.</li>
+<li><strong>Interoperability</strong>: Phoenix should play nice with other tools, including CI servers, build
+chains and system tools.</li>
+<li><strong>Implementation agnostic</strong>: Phoenix should be able to read from anywhere, parse anything, build
+any output and write to anywhere. No limits.</li>
+<li><strong>Stability</strong>: New versions should follow Semver strictly and deprecate things slowly.</li>
+</ol>
+<h2>Installation</h2><blockquote>
+<p>Note: Phoenix is currently in initial development and not ready for use at the moment. If you plan
+to contribute, please have a look at the <a href="#contributing">Contributing section</a>.</p>
+</blockquote>
+<p>Install the module:</p>
+<pre class="prettyprint source lang-bash"><code>// from the npm registry
+npm install phoenix-docs
+
+// from Github
+npm install Radiergummi/phoenix</code></pre><h2>Usage</h2><p>By default, the only thing required is calling <code>run()</code> on a configured Phoenix instance. That will 
+read the input and write documentation output. If you want to customize, whoever, the API is at your
+hands at all times in the build process.
+The API is available in two flavors: Either <em>event based</em> or <em>promise based</em>.
+Every module is obliged to return a promise and emit events at certain points in the flow. You are 
+not bound to one, of course: Promises and events mix just fine.</p>
+<h3>Simple usage</h3><pre class="prettyprint source lang-js"><code>const phoenix = new Phoenix(options);
+
+phoenix.run();</code></pre><h3>Using Promises</h3><pre class="prettyprint source lang-js"><code>const phoenix = new Phoenix(options);
+
+phoenix.createDocument('my project title')
+
+// we can read arbitrary glob paths here if we use the FileSystemReader
+.then(document => phoenix.read(['path1', 'path2']))
+
+// at this point, we have an array of objects that describe all of our source files
+.then(sourceFilesContent => phoenix.parse(sourceFilesContent))</code></pre><p>Point of the code examples being, you can intervene at any point in the pipeline and do your thing 
+with the current results, then continue.</p>
+<h3>Using events</h3><p>No surprises with event emitters: I used the ordinary <code>events</code> module. Phoenix emits all sorts of 
+events, all of which you can find <a href="#event-list">in the table below</a>. You can hook into them and 
+modify the current results at any time.</p>
+<pre class="prettyprint source lang-js"><code>const phoenix = new Phoenix(options);
+
+phoenix.on('read:after', sourceFilesContent => console.log(sourceFilesContent));
+
+phoenix.run();</code></pre><h2>Documents</h2><p>What would be the best way to maintain an output agnostic data format for documentation? It's 
+already in there: A <code>Document</code>. And yes, it's similar to your everyday browser document, just a 
+little stripped down and optimized for the use case.<br>The Document object resembles a tree structure that holds nested document nodes. There is a basic
+preset of different node types, but you can of course create new node types based on the existing.
+The task of a transformer is to transform the document nodes into the output nodes. Consider this:
+A <code>section</code> node might directly map to the <code>&lt;section&gt;</code> tag, while in markdown, it's just a new line.
+An Overview of the <code>Document</code> API can be found in the 
+<a href="./lib/document/README.md">Document API documentation</a>.</p>
+<h4>Event list</h4><p><strong>This section is, as the whole project, still a work in progress.</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Event properties</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">init</td>
+<td style="text-align:left"><code>ENV</code>, <code>options</code></td>
+<td style="text-align:left">Phoenix initialisation. Receives current environment and the options Phoenix has retrieved from <code>ENV</code>, a CLI parameter or config file.</td>
+</tr>
+<tr>
+<td style="text-align:left">read:before</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Before any read operation happens.</td>
+</tr>
+<tr>
+<td style="text-align:left">read:init</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all read instances have been created.</td>
+</tr>
+<tr>
+<td style="text-align:left">read:file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a file is read.</td>
+</tr>
+<tr>
+<td style="text-align:left">read:directory</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a directory is read.</td>
+</tr>
+<tr>
+<td style="text-align:left">read:done</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all read operations have started.</td>
+</tr>
+<tr>
+<td style="text-align:left">read:after</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">After all read operations are finished.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:before</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Before any parse operation happens.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:init</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all parse instances have been created.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a file is parsed.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:symbol</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a symbol is parsed.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:method</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a method is parsed.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:property</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a property is parsed.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:class</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a class is parsed.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:done</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all parse operations have started.</td>
+</tr>
+<tr>
+<td style="text-align:left">parse:after</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">After all parse operations are finished.</td>
+</tr>
+<tr>
+<td style="text-align:left">transform:before</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Before any transform operation happens.</td>
+</tr>
+<tr>
+<td style="text-align:left">transform:init</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all transform instances have been created.</td>
+</tr>
+<tr>
+<td style="text-align:left">transform:file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When the transform of a file is created.</td>
+</tr>
+<tr>
+<td style="text-align:left">transform:section</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When the transform of a section is created.</td>
+</tr>
+<tr>
+<td style="text-align:left">transform:done</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all transform operations have started.</td>
+</tr>
+<tr>
+<td style="text-align:left">transform:after</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">After all transform operations are finished.</td>
+</tr>
+<tr>
+<td style="text-align:left">write:before</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Before any write operation happens.</td>
+</tr>
+<tr>
+<td style="text-align:left">write:init</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all write instances have been created.</td>
+</tr>
+<tr>
+<td style="text-align:left">write:file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a file is written.</td>
+</tr>
+<tr>
+<td style="text-align:left">write:directory</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When a directory is created.</td>
+</tr>
+<tr>
+<td style="text-align:left">write:done</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">When all write operations have started.</td>
+</tr>
+<tr>
+<td style="text-align:left">write:after</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">After all write operations are finished.</td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, each module has the possibility of emitting their own events. They will be proxied to
+the Phoenix instance as <code>{{module prototype name}}:{{module class name}}:{{event name}}</code>. For 
+example, should a transform module that creates XML output (<em>&quot;FoobarXMLTransformer&quot;</em>) emit a 
+<code>newNode</code> event, it would be emitted like so: <code>transform:foobarxmltransformer:newNode</code>.</p>
+<h1>Terminology</h1><p>Phoenix uses several terms that might sound unfamiliar at first. This is necessary to distinguish 
+between several states the subject code can take and to stay technology agnostic.</p>
+<h3>Origin</h3><p>An <em>origin</em> is a place to pull <a href="#source">sources</a> from. This might be a file path, a database 
+connection or a remote URI.</p>
+<h3>Source</h3><p>A <em>source</em> is an object representing a code fragment. At minimum, it has two properties: <code>name</code> and 
+<code>code</code>, where <code>name</code> is the source identifier (for example a file path) and <code>code</code> is the actual 
+source code that is subject to documentation.</p>
+<h3>AST</h3><p><em>AST</em> is an abbreviation for <em>Abstract Syntax Tree</em>. It represents the abstract structure of any 
+kind of source code. You can read more on the topic over at 
+<a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">Wikipedia</a>.</p>
+<h3>Documentation object</h3><p>In lieu of a better word, I decided to call transformed documentation snippets (already in their
+target output format) <em>objects</em>. This might be subject to change, though.<br>An <em>object</em> refers to a <a href="#node">document node</a> that holds transformed documentation text.</p>
+<h3>Node</h3><p><em>Nodes</em> represent a single branch in the tree structure of a <a href="#document">document</a>. They can hold 
+children nodes themselves and are roughly comparable to the 
+<a href="https://developer.mozilla.org/en/docs/Web/API/Node">Browser node object</a>.</p>
+<h3>Document</h3><p>The <em>Document</em> class is the heart of Phoenix. The whole process of reading, parsing, transforming 
+and writing code and documentation focuses on modifying a single <code>document</code> instance that holds the
+origins, sources, documentation objects and output fragments.</p>
+<h2>Contributing</h2><p>Contributions are welcome at any time. If you're experiencing a problem with Phoenix, please 
+<a href="https://github.com/Radiergummi/phoenix/issues/new">create a new issue</a>.<br>Before submitting a new pull request, please read <a href="./.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for 
+details on our code of conduct and the process for submitting pull requests.</p>
+<h2>Attribution</h2><p>Phoenix would not have been possible without the work of a lot of awesome people and open source 
+projects, way too many to mention.<br>There are some, however, that I'd like to mention specifically:</p>
+<ul>
+<li><a href="https://github.com/craigchilds94">Craig</a> for joining in right from the start!</li>
+<li><a href="https://github.com/onury">onury</a> from <a href="https://github.com/onury/jsdoc-x">jsdoc-x</a> for providing 
+an almost-instant change to the library's error output</li>
+<li><a href="https://github.com/rafaesc">rafaesc</a> from
+<a href="https://github.com/vue-styleguidist/vue-docgen-api">vue-docgen-api</a> for including a method to 
+parse sources instead of files</li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Abstract%2520Module.html">Abstract Module</a></li><li><a href="Abstract%2520Parser%2520class.html">Abstract Parser class</a></li><li><a href="Abstract%2520Reader%2520class.html">Abstract Reader class</a></li><li><a href="Abstract%2520Transformer%2520class.html">Abstract Transformer class</a></li><li><a href="Abstract%2520Utility%2520class.html">Abstract Utility class</a></li><li><a href="Abstract%2520Writer%2520class.html">Abstract Writer class</a></li><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="Comment%2520element.html">Comment element</a></li><li><a href="Document.Page.html">Page</a></li><li><a href="Document%2520element.html">Document element</a></li><li><a href="Document%2520node.html">Document node</a></li><li><a href="Element.html">Element</a></li><li><a href="File%2520system%2520reader.html">File system reader</a></li><li><a href="Filesystem%2520Writer.html">Filesystem Writer</a></li><li><a href="FileSystemReader.html">FileSystemReader</a></li><li><a href="JSDoc%252520Parser.html">JSDoc Parser</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="Link.html">Link</a></li><li><a href="Link%2520Element.html">Link Element</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="Main%2520Phoenix%2520class.html">Main Phoenix class</a></li><li><a href="MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Node.html">Node</a></li><li><a href="Page.html">Page</a></li><li><a href="Paragraph.html">Paragraph</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Phoenix.Parser.html">Parser</a></li><li><a href="Phoenix.Reader.html">Reader</a></li><li><a href="Phoenix.Transformer.html">Transformer</a></li><li><a href="Phoenix.Writer.html">Writer</a></li><li><a href="Reader.html">Reader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="STDIN%2520reader.html">STDIN reader</a></li><li><a href="StdInReader.html">StdInReader</a></li><li><a href="Text.html">Text</a></li><li><a href="Text%2520element.html">Text element</a></li><li><a href="Writer.html">Writer</a></li></ul><h3>Namespaces</h3><ul><li><a href="Document.html">Document</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#basePath">basePath</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Thu Nov 30 2017 14:48:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

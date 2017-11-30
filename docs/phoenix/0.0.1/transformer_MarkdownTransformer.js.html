@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: transformer/MarkdownTransformer.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: transformer/MarkdownTransformer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/*
+ global module,
+ require
+ */
+
+const Transformer = require( './Transformer' );
+
+/**
+ * Provides transformation to Markdown
+ *
+ * @extends Transformer
+ * @class
+*/
+class MarkdownTransformer extends Transformer {
+
+  /**
+   * write Markdown output
+   * @param {Document} document
+   * @private
+   */
+  _invoke ( document ) {
+
+  }
+
+  /**
+   * @inheritDoc
+   */
+  heading ( text, level = 1) {
+    return `${'#'.repeat( level )} ${text}\n`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  paragraph ( text ) {
+    return `\n${text}\n`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  emphasis ( text ) {
+    return `*${text}*`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  strongEmphasis ( text ) {
+    return `**${text}**`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  strikeThrough ( text ) {
+    return `~~${text}~~`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  code ( text ) {
+    return '`' + text + '`';
+  }
+
+  /**
+   * @inheritDoc
+   */
+  codeBlock ( text, language = '' ) {
+    return '\n```' + language + '\n' + text + '\n```\n';
+  }
+
+  /**
+   * @inheritDoc
+   */
+  link ( target, text ) {
+    return `[${text}](${target})`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  unOrderedList ( items ) {
+    return items.reduce( ( list, currentItem ) => {
+      return list + ` - ${currentItem}\n`;
+    }, '' );
+  }
+
+  /**
+   * @inheritDoc
+   */
+  orderedList ( items ) {
+    return items.reduce( ( list, currentItem, currentIndex ) => {
+      return list + ` ${currentIndex}. ${currentItem}`;
+    }, '' );
+  }
+
+  /**
+   * @inheritDoc
+   */
+  blockQuote ( text ) {
+    return `> ${text}\n`;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  horizontalRule () {
+    return '\n\n------\n\n';
+  }
+
+  /**
+   * @inheritDoc
+   */
+  image ( target, alt = 'Image', title = '' ) {
+    return `![${alt}](${target} "${title}")`;
+  }
+
+  /**
+   * @augments Transformer#table
+   *
+   * I've taken this Markdown method from @wooorm from Github and modified the source a bit.
+   * @see https://github.com/wooorm/markdown-table
+   */
+  table ( table, options = {} ) {
+    const delimiter = ' | ',
+          start     = '| ',
+          end       = ' |';
+
+    let alignment = options.align,
+        cellCount = 0,
+        rowIndex  = -1,
+        rowLength = table.length,
+        sizes     = [],
+        align,
+        rule,
+        rows,
+        row,
+        cells,
+        index,
+        position,
+        size,
+        value,
+        spacing,
+        before,
+        after;
+
+    alignment = alignment ? alignment.concat() : [];
+
+    /**
+     * @description get the position of the last dot in `value`
+     * @param  {*}      value
+     * @return {number}
+     */
+    function dotIndex ( value ) {
+      const match = /\.[^.]*$/.exec( value );
+
+      return match ? match.index + 1 : value.length;
+    }
+
+    while ( rowIndex++ &lt; rowLength ) {
+      row = table[ rowIndex ];
+
+      index = -1;
+
+      if ( row.length > cellCount ) {
+        cellCount = row.length;
+      }
+
+      while ( index++ &lt; cellCount ) {
+        position = row[ index ] ? dotIndex( row[ index ] ) : null;
+
+        if ( !sizes[ index ] ) {
+          sizes[ index ] = 3;
+        }
+
+        if ( position > sizes[ index ] ) {
+          sizes[ index ] = position;
+        }
+      }
+    }
+
+    if ( typeof alignment === 'string' ) {
+      alignment = alignment.repeat( cellCount ).split( '' );
+    }
+
+    // Make sure only valid alignments are used
+    index = -1;
+
+    while ( index++ &lt; cellCount ) {
+      align = alignment[ index ];
+
+      if ( typeof align === 'string' ) {
+        align = align.charAt( 0 ).toLowerCase();
+      }
+
+      if ( [ 'left', 'right', 'center', '.', '' ].indexOf( align ) === -1 ) {
+        align = '';
+      }
+
+      alignment[ index ] = align;
+    }
+
+    rowIndex = -1;
+    rows     = [];
+
+    while ( rowIndex++ &lt; rowLength ) {
+      row = table[ rowIndex ];
+
+      index = -1;
+      cells = [];
+
+      while ( ++index &lt; cellCount ) {
+        value = row[ index ];
+
+        value = String( value ) || '';
+
+        if ( alignment[ index ] === '.' ) {
+          position = dotIndex( value );
+
+          size = sizes[ index ] +
+            (/\./.test( value ) ? 0 : 1) -
+            (String( value ).length - position);
+
+          cells[ index ] = value + ' '.repeat( size - 1 );
+        } else {
+          cells[ index ] = value;
+        }
+      }
+
+      rows[ rowIndex ] = cells;
+    }
+
+    sizes    = [];
+    rowIndex = -1;
+
+    while ( rowIndex++ &lt; rowLength ) {
+      cells = rows[ rowIndex ];
+
+      index = -1;
+
+      while ( index++ &lt; cellCount ) {
+        value = cells[ index ];
+
+        if ( !sizes[ index ] ) {
+
+          // minimum cell size
+          sizes[ index ] = 3;
+        }
+
+        size = String( value ).length;
+
+        if ( size > sizes[ index ] ) {
+          sizes[ index ] = size;
+        }
+      }
+    }
+
+    rowIndex = -1;
+
+    while ( rowIndex++ &lt; rowLength ) {
+      cells = rows[ rowIndex ];
+
+      index = -1;
+
+      if ( options.pad !== false ) {
+        while ( index++ &lt; cellCount ) {
+          value = cells[ index ];
+
+          position = sizes[ index ] - (String( value ).length || 0);
+          spacing  = ' '.repeat( position );
+
+          if ( alignment[ index ] === 'right' || alignment[ index ] === '.' ) {
+            // noinspection JSUnresolvedFunction
+            value = spacing.padStart( position );
+          } else if ( alignment[ index ] === 'center' ) {
+            position /= 2;
+
+            if ( position % 1 === 0 ) {
+              before = position;
+              after  = position;
+            } else {
+              before = position + 0.5;
+              after  = position - 0.5;
+            }
+
+            // noinspection JSUnresolvedFunction
+            value = value
+              .padStart( before )
+              .padEnd( after );
+          } else {
+            value += spacing;
+          }
+
+          cells[ index ] = value;
+        }
+      }
+
+      rows[ rowIndex ] = cells.join( delimiter );
+    }
+
+    if ( options.rule !== false ) {
+      index = -1;
+      rule  = [];
+
+      while ( ++index &lt; cellCount ) {
+
+        // When `pad` is false, make the rule the same size as the first row
+        if ( options.pad === false ) {
+          value   = table[ 0 ][ index ];
+          spacing = String( value ).length;
+          spacing = spacing > 3 ? spacing : 3;
+        } else {
+          spacing = sizes[ index ];
+        }
+
+        align = alignment[ index ];
+
+        // When `align` is left, don't add colons.
+        value = align === 'right' || align === '' ? '-' : ':';
+        value += '-'.repeat( spacing - 2 );
+        value += align !== 'left' &amp;&amp; align !== '' ? ':' : '-';
+
+        rule[ index ] = value;
+      }
+
+      rows.splice( 1, 0, rule.join( delimiter ) );
+    }
+
+    return start + rows.join( end + '\n' + start ) + end;
+  }
+}
+
+module.exports = MarkdownTransformer;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Abstract%2520Module.html">Abstract Module</a></li><li><a href="Abstract%2520Parser%2520class.html">Abstract Parser class</a></li><li><a href="Abstract%2520Reader%2520class.html">Abstract Reader class</a></li><li><a href="Abstract%2520Transformer%2520class.html">Abstract Transformer class</a></li><li><a href="Abstract%2520Utility%2520class.html">Abstract Utility class</a></li><li><a href="Abstract%2520Writer%2520class.html">Abstract Writer class</a></li><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="Comment%2520element.html">Comment element</a></li><li><a href="Document.Page.html">Page</a></li><li><a href="Document%2520element.html">Document element</a></li><li><a href="Document%2520node.html">Document node</a></li><li><a href="Element.html">Element</a></li><li><a href="File%2520system%2520reader.html">File system reader</a></li><li><a href="Filesystem%2520Writer.html">Filesystem Writer</a></li><li><a href="FileSystemReader.html">FileSystemReader</a></li><li><a href="JSDoc%252520Parser.html">JSDoc Parser</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="Link.html">Link</a></li><li><a href="Link%2520Element.html">Link Element</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="Main%2520Phoenix%2520class.html">Main Phoenix class</a></li><li><a href="MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Node.html">Node</a></li><li><a href="Page.html">Page</a></li><li><a href="Paragraph.html">Paragraph</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Phoenix.Parser.html">Parser</a></li><li><a href="Phoenix.Reader.html">Reader</a></li><li><a href="Phoenix.Transformer.html">Transformer</a></li><li><a href="Phoenix.Writer.html">Writer</a></li><li><a href="Reader.html">Reader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="STDIN%2520reader.html">STDIN reader</a></li><li><a href="StdInReader.html">StdInReader</a></li><li><a href="Text.html">Text</a></li><li><a href="Text%2520element.html">Text element</a></li><li><a href="Writer.html">Writer</a></li></ul><h3>Namespaces</h3><ul><li><a href="Document.html">Document</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#basePath">basePath</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Thu Nov 30 2017 14:48:19 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

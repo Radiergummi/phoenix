@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Parser</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Parser</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Parser</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="Parser"><span class="type-signature"></span>new Parser<span class="signature">(sources, document, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates a new parser instance
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sources</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">source code to parse</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Document.html">Document</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">document instance</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">options for the parser</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="parser_Parser.js.html">parser/Parser.js</a>, <a href="parser_Parser.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="sources"><span class="type-signature"></span>sources<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    holds the sources
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="parser_Parser.js.html">parser/Parser.js</a>, <a href="parser_Parser.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="accepts"><span class="type-signature"></span>accepts<span class="signature">(source)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Provides information about which type of input source this Parser accepts. By default, this
+method returns true for any type, thereby accepting every file passed to it. Parsers should
+check the fileType to decide whether to process the file.
+This is helpful for mixed type projects: Consider something containing .js, .jsx and .php files
+that should be individually processed. For each of those types, an individual parser will parse
+the corresponding files in parallel.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>source</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the source object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="parser_Parser.js.html">parser/Parser.js</a>, <a href="parser_Parser.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    parse the provided source
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="parser_Parser.js.html">parser/Parser.js</a>, <a href="parser_Parser.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Abstract%2520Module.html">Abstract Module</a></li><li><a href="Abstract%2520Parser%2520class.html">Abstract Parser class</a></li><li><a href="Abstract%2520Reader%2520class.html">Abstract Reader class</a></li><li><a href="Abstract%2520Transformer%2520class.html">Abstract Transformer class</a></li><li><a href="Abstract%2520Utility%2520class.html">Abstract Utility class</a></li><li><a href="Abstract%2520Writer%2520class.html">Abstract Writer class</a></li><li><a href="AbstractModule.html">AbstractModule</a></li><li><a href="Comment%2520element.html">Comment element</a></li><li><a href="Document.Page.html">Page</a></li><li><a href="Document%2520element.html">Document element</a></li><li><a href="Document%2520node.html">Document node</a></li><li><a href="Element.html">Element</a></li><li><a href="File%2520system%2520reader.html">File system reader</a></li><li><a href="Filesystem%2520Writer.html">Filesystem Writer</a></li><li><a href="FileSystemReader.html">FileSystemReader</a></li><li><a href="JSDoc%252520Parser.html">JSDoc Parser</a></li><li><a href="JSDocUtility.html">JSDocUtility</a></li><li><a href="Link.html">Link</a></li><li><a href="Link%2520Element.html">Link Element</a></li><li><a href="LogUtility.html">LogUtility</a></li><li><a href="Main%2520Phoenix%2520class.html">Main Phoenix class</a></li><li><a href="MarkdownTransformer.html">MarkdownTransformer</a></li><li><a href="Node.html">Node</a></li><li><a href="Page.html">Page</a></li><li><a href="Paragraph.html">Paragraph</a></li><li><a href="Parser.html">Parser</a></li><li><a href="Phoenix.html">Phoenix</a></li><li><a href="Phoenix.Parser.html">Parser</a></li><li><a href="Phoenix.Reader.html">Reader</a></li><li><a href="Phoenix.Transformer.html">Transformer</a></li><li><a href="Phoenix.Writer.html">Writer</a></li><li><a href="Reader.html">Reader</a></li><li><a href="Section.html">Section</a></li><li><a href="SourceDirectory.html">SourceDirectory</a></li><li><a href="SourceFile.html">SourceFile</a></li><li><a href="STDIN%2520reader.html">STDIN reader</a></li><li><a href="StdInReader.html">StdInReader</a></li><li><a href="Text.html">Text</a></li><li><a href="Text%2520element.html">Text element</a></li><li><a href="Writer.html">Writer</a></li></ul><h3>Namespaces</h3><ul><li><a href="Document.html">Document</a></li></ul><h3>Global</h3><ul><li><a href="global.html#accepts">accepts</a></li><li><a href="global.html#basePath">basePath</a></li><li><a href="global.html#formatLine">formatLine</a></li><li><a href="global.html#loadPhoenixConfiguration">loadPhoenixConfiguration</a></li><li><a href="global.html#prefix">prefix</a></li><li><a href="global.html#REPL">REPL</a></li><li><a href="global.html#startPhoenix">startPhoenix</a></li><li><a href="global.html#Symbol">Symbol</a></li><li><a href="global.html#time">time</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0</a> on Thu Nov 30 2017 14:48:20 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
