@@ -90,8 +90,89 @@ npm install Radiergummi/phoenix
 ```
 
 
-Usage
------
+Command line usage
+------------------
+Phoenix provides a CLI application that can be found at [./bin/phoenix](./bin/phoenix)(.bat) or 
+invoked with `npm run phoenix`. It does load Phoenix with the specified configuration and run it.
+
+### Configuration files
+By default, Phoenix uses a `.phoenixrc` file in the working directory. You can use the `-c` or 
+`--config` switch to specify the path to another file, though.  
+The PhoenixRC file is a single AMD module that exports an object. Contrary to JSON, this provides 
+the ability to retrieve your settings from somewhere else or use values depending on the environment
+(think CI or build servers).   
+Note, however, that Phoenix out of itself does not make use of environment variables. That might be
+changed if anyone can provide a use case where evaluating them in the config file is not possible, 
+though. The config file has to be structured like so:  
+
+```js
+const Phoenix = require('phoenix');
+
+module.exports = {
+  
+  // Holds general information about your project. Most values will be populated from the 
+  // package.json, if found in the working directory.
+  project: {
+    
+    // Project name
+    name: String,
+    
+    // Project version. Defaults to 0.0.1
+    version: String
+  },
+  
+  // The next section holds all modules that should be loaded for the build process. All of them are
+  // supplied as arrays to retain the correct order for module chains.
+  
+  // Holds all readers. Readers are executed in parallel, chaining them is not necessary. 
+  readers: [
+    
+    // The default Phoenix modules are available as static properties on the Phoenix class
+    Phoenix.FileSystemReader,
+    
+    // Third-party modules can be inserted using `require`
+    require('phoenix-reader-s3')
+  ],
+  
+  // Holds all parsers. Parsers are executed in parallel by default, but can be chained optionally.
+  parsers: [
+    
+    // This parser will be executed in parallel with all others. So in order to just parse all 
+    // files, you can simply include them here one after the other.
+    require('phoenix-parser-php'),
+    
+    // This parser chains two or more parsers. They will be executed sequentially, receiving the 
+    // files from the previous reader.
+    new Phoenix.ChainedParser([
+      Phoenix.VueComponentParser,
+      Phoenix.JSDocParser
+    ])
+  ],
+  
+  // Holds all transformers. Transformers are executed in parallel, chaining them is not necessary. 
+  transformers: [
+    // ...
+  ],
+  
+  // Holds all writers. Writers are executed in parallel, chaining them is not necessary. 
+  writers: [
+    // ...
+  ],
+  
+  // this is the first options object for a Phoenix module. It will be passed down to the file 
+  // system reader, as is. You can specify options for any module here, as long as you name the 
+  // options object as the module class name. So, for `class MyAwesomeModule {}` that'd be
+  // `MyAwesomeModule: {}`.
+  // Any options you pass will be merged with the default options deeply. Phoenix will try to make
+  // reasonable decisions by default, but you might want to modify some of them. All modules state
+  // their default options in the documentation.
+  FileSystemReader: {}
+};
+```
+
+
+Programmatic Usage
+------------------
 By default, the only thing required is calling `run()` on a configured Phoenix instance. That will 
 read the input and write documentation output. If you want to customize, whoever, the API is at your
 hands at all times in the build process.
@@ -232,6 +313,43 @@ Contributions are welcome at any time. If you're experiencing a problem with Pho
 [create a new issue](https://github.com/Radiergummi/phoenix/issues/new).  
 Before submitting a new pull request, please read [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for 
 details on our code of conduct and the process for submitting pull requests.
+
+
+Writing your own Phoenix module
+-------------------------------
+Phoenix has been designed to be a framework from the start. I wanted to make sure anyone can design,
+implement and test modules for whatever purpose as easy as possible. That has been the driving force
+behind many design decisions, too: Instead of a promise-based, object-oriented approach, using 
+something based on streams would have been entirely possible, maybe even more efficient - but not as 
+friendly to work with or build upon.  
+To start off with your own module, you should first consult the general module documentation and 
+have a look at some of the existing core modules. All of them inherit their base module, that is, a
+class providing the general API Phoenix expects from the module, event emitter inheritance, error 
+handling, option merging and logging. You don't need to take care of any of these, but you can, via
+overwriting the parent properties and methods. Let's take a look at an example:  
+
+```js
+const Phoenix = require('phoenix');
+
+class MyAwesomeReader extends Phoenix.Reader {
+  
+  /**
+  * `_invoke` is the only required method for any module. Depending on what kind of module it is, a 
+  * Reader in this case, it provides the main functionality.
+  * 
+  * @returns {Promise} 
+	*/
+  _invoke() {
+    // we have access to `this.origins`, `this.document` and `this._options` already
+  }
+}
+```
+
+This class is almost complete! You could include it in any Phoenix workflow, it just would not do 
+anything actually useful. Inside the `_invoke` method, you should use the `this.document` property
+to work with the code provided by the user. You can find detailed documentation on what is expected
+from a module in the module documentation.
+
 
 Attribution
 -----------
