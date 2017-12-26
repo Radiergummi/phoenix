@@ -19,17 +19,61 @@ const ChildlessElement = require( '../lib/document/element/ChildlessElement' ),
 describe( 'Documents', () => {
   describe( 'Nodes', () => {
     it( 'Should append children', () => {
-      const node = new Node();
+      const node   = new Node,
+            child1 = new Node,
+            child2 = new Node,
+            child3 = new Node;
 
-      node.appendChild( new Node );
-      node.appendChild( new Node );
-      node.appendChild( new Node );
+      node.appendChild( child1 );
+      node.appendChild( child2 );
+      node.appendChild( child3 );
 
       expect( node ).to.have.length( 3 );
     } );
 
+    it( 'Should retrieve the first child node', () => {
+      const node   = new Node,
+            child1 = new Node,
+            child2 = new Node;
+
+      node.appendChild( child1 );
+
+      expect( node.firstChild ).to.equal( child1 );
+
+      node.appendChild( child2 );
+
+      expect( node.firstChild ).to.equal( child1 );
+    } );
+
+    it( 'Should retrieve the last child node', () => {
+      const node   = new Node,
+            child1 = new Node,
+            child2 = new Node;
+
+      node.appendChild( child1 );
+
+      expect( node.lastChild ).to.equal( child1 );
+
+      node.appendChild( child2 );
+
+      expect( node.lastChild ).to.equal( child2 );
+    } );
+
+    it( 'Should prepend children', () => {
+      const node   = new Node,
+            child1 = new Node,
+            child2 = new Node,
+            child3 = new Node;
+
+      node.appendChild( child1 );
+      node.appendChild( child2 );
+      node.prependChild( child3 );
+
+      expect( node.firstChild ).to.equal( child3 );
+    } );
+
     it( 'Should remove children', () => {
-      const node  = new Node,
+      const node   = new Node,
             child1 = new Node,
             child2 = new Node,
             child3 = new Node;
@@ -41,8 +85,12 @@ describe( 'Documents', () => {
       node.removeChild( child2 );
 
       expect( node.length ).to.equal( 2 );
+      expect( node.firstChild ).to.equal( child1 );
+      expect( node.lastChild ).to.equal( child3 );
     } );
+  } );
 
+  describe( 'Elements', () => {
     describe( 'Section', () => {
       it( 'Should create section elements', () => {
         const section = new Section();
@@ -145,4 +193,5 @@ describe( 'Documents', () => {
       } );
     } );
   } );
+
 } );
