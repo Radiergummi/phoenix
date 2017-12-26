@@ -72,7 +72,7 @@ describe( 'Documents', () => {
       expect( node.firstChild ).to.equal( child3 );
     } );
 
-    it( 'Should remove children', () => {
+    it( 'Should remove children by child', () => {
       const node   = new Node,
             child1 = new Node,
             child2 = new Node,
@@ -87,6 +87,34 @@ describe( 'Documents', () => {
       expect( node.length ).to.equal( 2 );
       expect( node.firstChild ).to.equal( child1 );
       expect( node.lastChild ).to.equal( child3 );
+    } );
+
+    it( 'Should remove children by index', () => {
+      const node   = new Node,
+            child1 = new Node,
+            child2 = new Node,
+            child3 = new Node;
+
+      node.appendChild( child1 );
+      node.appendChild( child2 );
+      node.appendChild( child3 );
+
+      node.removeChild( 1 );
+
+      expect( node.length ).to.equal( 2 );
+      expect( node.firstChild ).to.equal( child1 );
+      expect( node.lastChild ).to.equal( child3 );
+    } );
+
+    it( 'Should remove itself', () => {
+      const root  = new Node,
+            child = new Node;
+
+      root.appendChild( child );
+
+      child.remove();
+
+      expect( root ).to.have.length( 0 );
     } );
   } );
 
@@ -193,5 +221,4 @@ describe( 'Documents', () => {
       } );
     } );
   } );
-
 } );
