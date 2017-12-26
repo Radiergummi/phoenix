@@ -106,6 +106,15 @@ describe( 'Documents', () => {
       expect( node.lastChild ).to.equal( child3 );
     } );
 
+    it( 'Should bail on invalid children', () => {
+      const node = new Node;
+
+      expect( () => node.removeChild( 'foo' ) ).to.throw( TypeError );
+      expect( () => node.removeChild( false ) ).to.throw( TypeError );
+      expect( () => node.removeChild( {} ) ).to.throw( TypeError );
+      expect( () => node.removeChild( [] ) ).to.throw( TypeError );
+    } );
+
     it( 'Should remove itself', () => {
       const root  = new Node,
             child = new Node;
