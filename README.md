@@ -368,7 +368,8 @@ from a module in the module documentation.
 
 Builds
 ------
-Phoenix is currently built [on my TeamCity server](https://teamcity.hades.9dev.de/project.html?projectId=Phoenix&branch_Phoenix=__all_branches__). You'll have guest access if you click on *Login as guest* below the login form.
+Phoenix is currently built [on my TeamCity server](https://teamcity.hades.9dev.de/project.html?projectId=Phoenix&branch_Phoenix=__all_branches__). You'll have guest access if you click on *Login as guest* below the login form.  
+The TeamCity page provides several detailed reports, including code coverage and test sources, as well as documentation.
 
 
 Attribution
