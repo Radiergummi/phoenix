@@ -344,7 +344,7 @@ class MyAwesomeReader extends Phoenix.Reader {
   }
 }
 ```
-
+ß
 This class is almost complete! You could include it in any Phoenix workflow, it just would not do 
 anything actually useful. Inside the `_invoke` method, you should use the `this.document` property
 to work with the code provided by the user. You can find detailed documentation on what is expected
