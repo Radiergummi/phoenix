@@ -1,4 +1,4 @@
-Phoenix
+Phoenix [![Build status](https://teamcity.hades.9dev.de/app/rest/builds/buildType:(id:Phoenix_Build)/statusIcon)](https://teamcity.hades.9dev.de/project.html?projectId=Phoenix&branch_Phoenix=__all_branches__)
 =======
 *A lightweight and modular framework to document code projects*
 
@@ -26,7 +26,8 @@ Contents
 6. [Documents](#documents)
 7. [Terminology](#terminology)
 8. [Writing your own module](#writing-your-own-module)
-9. [Attribution](#attribution)
+9. [Builds](#builds)
+10. [Attribution](#attribution)
 
 
 Abstract Concept
@@ -363,6 +364,11 @@ This class is almost complete! You could include it in any Phoenix workflow, it 
 anything actually useful. Inside the `_invoke` method, you should use the `this.document` property
 to work with the code provided by the user. You can find detailed documentation on what is expected
 from a module in the module documentation.
+
+
+Builds
+------
+Phoenix is currently built [on my TeamCity server](https://teamcity.hades.9dev.de/project.html?projectId=Phoenix&branch_Phoenix=__all_branches__). You'll have guest access if you click on *Login as guest* below the login form.
 
 
 Attribution
