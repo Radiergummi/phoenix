@@ -60,7 +60,7 @@
     "lint-init": "./node_modules/.bin/eslint --init",
     "docs": "./node_modules/.bin/jsdoc -R ./README.md -P package.json -c ./.jsdocrc",
     "test": "./node_modules/.bin/mocha tests",
-    "test-ci":"./node_modules/.bin/nyc ./node_modules/.bin/mocha tests --reporter mocha-teamcity-reporter-v2",
+    "test-ci":"./node_modules/.bin/nyc --reporter=teamcity ./node_modules/.bin/mocha tests --reporter mocha-teamcity-reporter-v2",
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha tests"
   }
 }
