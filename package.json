@@ -1,64 +1,66 @@
 {
-  "name":            "phoenix",
-  "version":         "0.0.1",
-  "description":     "A lightweight and modular framework to document code projects",
-  "keywords":        [
+  "name": "phoenix",
+  "version": "0.0.1",
+  "description": "A lightweight and modular framework to document code projects",
+  "keywords": [
     "phoenix",
     "documentation",
     "docs"
   ],
-  "homepage":        "https://github.com/Radiergummi/phoenix",
-  "license":         "MIT",
-  "author":          {
-    "name":  "Moritz Friedrich",
+  "homepage": "https://github.com/Radiergummi/phoenix",
+  "license": "MIT",
+  "author": {
+    "name": "Moritz Friedrich",
     "email": "m@9dev.de",
-    "url":   "https://www.moritzfriedrich.com"
+    "url": "https://www.moritzfriedrich.com"
   },
-  "contributors":    [
+  "contributors": [
     {
-      "name":  "Craig Childs",
-      "url":   "http://craigchilds.me",
+      "name": "Craig Childs",
+      "url": "http://craigchilds.me",
       "email": "childscraig17@gmail.com"
     }
   ],
-  "repository":      {
+  "repository": {
     "type": "git",
-    "url":  "git+https://github.com/Radiergummi/phoenix.git"
+    "url": "git+https://github.com/Radiergummi/phoenix.git"
   },
-  "bugs":            {
+  "bugs": {
     "url": "https://github.com/Radiergummi/phoenix/issues"
   },
-  "engines":         {
+  "engines": {
     "node": ">=6.2.0"
   },
-  "main":            "index.js",
-  "directories":     {
-    "bin":     "./bin",
-    "lib":     "./lib",
-    "doc":     "./docs",
-    "test":    "./tests",
+  "main": "index.js",
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib",
+    "doc": "./docs",
+    "test": "./tests",
     "example": "./examples"
   },
-  "dependencies":    {
-    "commander":      "^2.12.2",
-    "fs-extra":       "^5.0.0",
-    "glob":           "^7.1.2",
-    "glob-promise":   "^3.3.0",
-    "jsdoc-x":        "^2.0.1",
-    "merge-options":  "^1.0.0",
+  "dependencies": {
+    "commander": "^2.12.2",
+    "fs-extra": "^5.0.0",
+    "glob": "^7.1.2",
+    "glob-promise": "^3.3.0",
+    "jsdoc-x": "^2.0.1",
+    "merge-options": "^1.0.0",
     "vue-docgen-api": "github:Radiergummi/vue-docgen-api"
   },
   "devDependencies": {
-    "chai":   "^4.1.2",
+    "chai": "^4.1.2",
     "eslint": "^4.13.1",
-    "mocha":  "^4.0.1",
-    "nyc":    "^11.4.1"
+    "mocha": "^4.0.1",
+    "mocha-teamcity-reporter-v2": "^2.1.0",
+    "nyc": "^11.4.1"
   },
-  "scripts":         {
-    "lint":      "./node_modules/.bin/eslint ./lib/**/*.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint ./lib/**/*.js",
     "lint-init": "./node_modules/.bin/eslint --init",
-    "docs":      "./node_modules/.bin/jsdoc -R ./README.md -P package.json -c ./.jsdocrc",
-    "test":      "./node_modules/.bin/mocha tests",
-    "coverage":  "./node_modules/.bin/nyc ./node_modules/.bin/mocha tests"
+    "docs": "./node_modules/.bin/jsdoc -R ./README.md -P package.json -c ./.jsdocrc",
+    "test": "./node_modules/.bin/mocha tests",
+    "test-ci":"./node_modules/.bin/nyc ./node_modules/.bin/mocha tests --reporter mocha-teamcity-reporter-v2",
+    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha tests"
   }
 }
