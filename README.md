@@ -15,6 +15,20 @@ files.
 Welcome to Phoenix.
 
 
+Contents
+--------
+
+1. [Abstract Concept](#abstract-concept)
+2. [Core Principles](#core-principles)
+3. [Installation](#installation)
+4. [Command line usage](#command-line-usage)
+5. [Programmatic Usage](#programmatic-usage)
+6. [Documents](#documents)
+7. [Terminology](#terminology)
+8. [Writing your own module](#writing-your-own-module)
+9. [Attribution](#attribution)
+
+
 Abstract Concept
 ----------------
 Phoenix consists of five core building blocks:
