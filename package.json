@@ -46,6 +46,7 @@
     "glob-promise": "^3.3.0",
     "jsdoc-x": "^2.0.1",
     "merge-options": "^1.0.0",
+    "uuid": "^3.1.0",
     "vue-docgen-api": "github:Radiergummi/vue-docgen-api"
   },
   "devDependencies": {
@@ -60,7 +61,7 @@
     "lint-init": "./node_modules/.bin/eslint --init",
     "docs": "./node_modules/.bin/jsdoc -R ./README.md -P package.json -c ./.jsdocrc",
     "test": "./node_modules/.bin/mocha tests",
-    "test-ci":"./node_modules/.bin/nyc --reporter=teamcity ./node_modules/.bin/mocha tests --reporter mocha-teamcity-reporter-v2",
+    "test-ci": "./node_modules/.bin/nyc --reporter=teamcity ./node_modules/.bin/mocha tests --reporter mocha-teamcity-reporter-v2",
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha tests",
     "coverage-report": "./node_modules/.bin/nyc --reporter=html --report-dir=./coverage ./node_modules/.bin/mocha tests"
   }
