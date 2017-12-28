@@ -142,6 +142,107 @@ describe( 'Documents', () => {
       expect( child3.rootNode ).to.equal( root );
     } );
 
+    xit( 'Should generate unique IDs', () => {
+
+      // create an array of 512*512 nodes, taking their UID property
+      const UIDs = new Array( 262144 )
+        .fill( undefined )
+        .map( i => (new Node).uid );
+
+      // create a new set from the UIDs, which is by definition unique
+      const UIDSet = new Set( UIDs );
+
+      // we can assume each UID must be unique if the set has the same size as the array
+      expect( UIDSet.size ).to.equal( 262144 );
+    } );
+
+    it( 'Should generate IDs', () => {
+      const root = new Node,
+            a    = new Node,
+            b    = new Node,
+            aa   = new Node,
+            ab   = new Node,
+            ba   = new Node,
+            bb   = new Node,
+            aaa  = new Node,
+            aab  = new Node,
+            aac  = new Node,
+            aba  = new Node,
+            abb  = new Node,
+            baa  = new Node,
+            bba  = new Node,
+            bbb  = new Node,
+            bbc  = new Node,
+            bbd  = new Node;
+
+      root.appendChild( a );
+      root.appendChild( b );
+      a.appendChild( aa );
+      a.appendChild( ab );
+      b.appendChild( ba );
+      b.appendChild( bb );
+      aa.appendChild( aaa );
+      aa.appendChild( aab );
+      aa.appendChild( aac );
+      ab.appendChild( aba );
+      ab.appendChild( abb );
+      ba.appendChild( baa );
+      bb.appendChild( bba );
+      bb.appendChild( bbb );
+      bb.appendChild( bbc );
+      bb.appendChild( bbd );
+
+      expect( root.id ).to.equal( '0' );
+      expect( a.id ).to.equal( '0:0' );
+      expect( b.id ).to.equal( '0:1' );
+      expect( aa.id ).to.equal( '0:0:0' );
+      expect( ab.id ).to.equal( '0:0:1' );
+      expect( ba.id ).to.equal( '0:1:0' );
+      expect( bb.id ).to.equal( '0:1:1' );
+      expect( aaa.id ).to.equal( '0:0:0:0' );
+      expect( aab.id ).to.equal( '0:0:0:1' );
+      expect( aac.id ).to.equal( '0:0:0:2' );
+      expect( aba.id ).to.equal( '0:0:1:0' );
+      expect( abb.id ).to.equal( '0:0:1:1' );
+      expect( baa.id ).to.equal( '0:1:0:0' );
+      expect( bba.id ).to.equal( '0:1:1:0' );
+      expect( bbb.id ).to.equal( '0:1:1:1' );
+      expect( bbc.id ).to.equal( '0:1:1:2' );
+      expect( bbd.id ).to.equal( '0:1:1:3' );
+    } );
+
+    it( 'Should update IDs', () => {
+      const root   = new Node,
+            child1 = new Node,
+            child2 = new Node;
+
+      expect( child1.id ).to.equal( '0' );
+      expect( child2.id ).to.equal( '0' );
+
+      root.appendChild( child1 );
+
+      expect( child1.id ).to.equal( '0:0' );
+
+      root.appendChild( child2 );
+
+      expect( child2.id ).to.equal( '0:1' );
+
+      child1.remove();
+
+      expect( child1.id ).to.equal( '0' );
+
+      child2.appendChild( child1 );
+
+      expect( child1.id ).to.equal( '0:1:0' );
+
+      /////
+      // TODO: If a node is removed, the parent should broadcast the imperative ID change to all of
+      // its children nodes. If this is implemented correctly, the above test will fail and should
+      // be switched out for the following:
+      // expect( child1.id ).to.equal( '0:0:0' );
+
+    } );
+
     it( 'Should find ancestors', () => {
       const root   = new Node,
             child1 = new Node,
@@ -197,7 +298,7 @@ describe( 'Documents', () => {
       expect( child2.hasDescendant( root1 ) ).to.be.false;
     } );
 
-
+    it( 'Should find nodes by' );
   } );
 
   describe( 'Elements', () => {
