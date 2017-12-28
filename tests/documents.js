@@ -113,6 +113,9 @@ describe( 'Documents', () => {
       expect( () => node.removeChild( false ) ).to.throw( TypeError );
       expect( () => node.removeChild( {} ) ).to.throw( TypeError );
       expect( () => node.removeChild( [] ) ).to.throw( TypeError );
+      expect( () => node.removeChild( null ) ).to.throw( TypeError );
+      expect( () => node.removeChild( undefined ) ).to.throw( TypeError );
+      expect( () => node.removeChild() ).to.throw( TypeError );
     } );
 
     it( 'Should remove itself', () => {
@@ -125,6 +128,76 @@ describe( 'Documents', () => {
 
       expect( root ).to.have.length( 0 );
     } );
+
+    it( 'Should retrieve the root node', () => {
+      const root   = new Node,
+            child1 = new Node,
+            child2 = new Node,
+            child3 = new Node;
+
+      child2.appendChild( child3 );
+      child1.appendChild( child2 );
+      root.appendChild( child1 );
+
+      expect( child3.rootNode ).to.equal( root );
+    } );
+
+    it( 'Should find ancestors', () => {
+      const root   = new Node,
+            child1 = new Node,
+            child2 = new Node,
+            child3 = new Node;
+
+      child2.appendChild( child3 );
+      child1.appendChild( child2 );
+      root.appendChild( child1 );
+
+      expect( child3.hasAncestor( root ) ).to.be.true;
+      expect( child2.hasAncestor( child3 ) ).to.be.false;
+      expect( child3.hasAncestor( child3 ) ).to.be.false;
+    } );
+
+    it( 'Should find descendants', () => {
+      const root   = new Node,
+            child1 = new Node,
+            child2 = new Node,
+            child3 = new Node;
+
+      child2.appendChild( child3 );
+      child1.appendChild( child2 );
+      root.appendChild( child1 );
+
+      expect( root.hasDescendant( child3 ) ).to.be.true;
+      expect( child2.hasDescendant( child1 ) ).to.be.false;
+      expect( child2.hasDescendant( child2 ) ).to.be.false;
+    } );
+
+    it( 'Should bail on invalid node type for ancestor/descendant', () => {
+      const root = new Node;
+
+      expect( () => root.hasAncestor( 'Node' ) ).to.throw( TypeError );
+      expect( () => root.hasDescendant( 'Node' ) ).to.throw( TypeError );
+    } );
+
+    it( 'Should handle nodes from foreign trees while looking for ancestors/descendants', () => {
+      const root1  = new Node,
+            root2  = new Node,
+            child1 = new Node,
+            child2 = new Node;
+
+      root1.appendChild( child1 );
+      root2.appendChild( child2 );
+
+      expect( root1.hasAncestor( root2 ) ).to.be.false;
+      expect( child1.hasAncestor( child2 ) ).to.be.false;
+      expect( child2.hasAncestor( root1 ) ).to.be.false;
+
+      expect( root1.hasDescendant( child2 ) ).to.be.false;
+      expect( root2.hasDescendant( child1 ) ).to.be.false;
+      expect( child2.hasDescendant( root1 ) ).to.be.false;
+    } );
+
+
   } );
 
   describe( 'Elements', () => {
