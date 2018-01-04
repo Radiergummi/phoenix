@@ -7,6 +7,7 @@
  describe,
  it
  */
+
 const expect = require( 'chai' ).expect;
 
 const Element = require( '../lib/document/element/Element' ),
