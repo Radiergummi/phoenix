@@ -360,8 +360,8 @@ describe( 'Nodes', () => {
   describe( 'Node IDs', () => {
     it( 'Should generate unique IDs', () => {
 
-      // create an array of 512*512 nodes, taking their UID property
-      const UIDs = new Array( 262144 )
+      // create an array of 1024 nodes, taking their UID property
+      const UIDs = new Array( 1024 )
         .fill( undefined )
         .map( i => (new Node).uid );
 
@@ -369,7 +369,7 @@ describe( 'Nodes', () => {
       const UIDSet = new Set( UIDs );
 
       // we can assume each UID must be unique if the set has the same size as the array
-      expect( UIDSet.size ).to.equal( 262144 );
+      expect( UIDSet.size ).to.equal( 1024 );
     } );
 
     it( 'Should generate IDs', () => {
