@@ -147,18 +147,54 @@ describe( 'Elements', () => {
   } );
 
   it( 'Should join all children Text nodes as textContent', () => {
+    const element = new Element;
+
+    element.appendChild( new Text( 'foo' ) );
+    element.appendChild( new Text( 'bar' ) );
+    element.appendChild( new Text( 'baz' ) );
+
+    expect( element.textContent ).to.equal( 'foo\nbar\nbaz' );
+  } );
+
+  it( 'Should join all nested children Text nodes as textContent', () => {
     const element = new Element,
           child1  = new Element,
           child2  = new Element;
 
-    element.appendChild( child1 );
-    child1.appendChild( child2 );
+    /*
+     It is important not to mess up the appendChild order here.
+     As written below, the tree looks like this:
+     element
+      ├── [Text]
+      └── child1
+          ├── [Text]
+          └── child2
+              └── [Text]
+
+     Try to think of the browser DOM - would we append the children elements first, the text
+     nodes second, the tree would look like this instead:
+     element
+     ├── child1
+     │   ├── child2
+     │   │   └── [Text]
+     │   └── [Text]
+     └── [Text]
+
+     Therefore, as soon as we merge those text nodes, the outcome will be "baz\nbar\nfoo", since
+     the textContent getter simply uses the iterateDown method that walks children following their
+     order in the parent element.
+
+     Hours wasted with this (increment counter if necessary): 1
+     */
 
     element.appendChild( new Text( 'foo' ) );
     child1.appendChild( new Text( 'bar' ) );
     child2.appendChild( new Text( 'baz' ) );
 
-    expect( element.textContent ).to.equal( 'baz\nbar\nfoo' );
+    element.appendChild( child1 );
+    child1.appendChild( child2 );
+
+    expect( element.textContent ).to.equal( 'foo\nbar\nbaz' );
   } );
 
   it( 'Should stringify its textContent', () => {

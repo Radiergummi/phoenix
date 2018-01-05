@@ -30,10 +30,26 @@ describe( 'Text elements', () => {
     expect( element ).to.have.property( 'content', '' );
   } );
 
+  it( 'Should allow setting text on the content and nodeValue properties', () => {
+    const element = new Text;
+
+    expect( element.content ).to.equal( '' );
+
+    element.content = 'foo';
+
+    expect( element.content ).to.equal( 'foo' );
+
+    element.nodeValue = 'bar';
+
+    expect( element.nodeValue ).to.equal( 'bar' );
+
+    expect( element.nodeValue ).to.equal( element.content );
+  } );
+
   it( 'Should return the text content as node value', () => {
     const element = new Text( 'foo bar baz' );
 
-    expect( element.nodeValue ).to.equal( 'foo bar baz' );
+    expect( element.nodeValue ).to.equal( element.content ).and.to.equal( 'foo bar baz' );
   } );
 
   it( 'Should return the text content length as length', () => {
