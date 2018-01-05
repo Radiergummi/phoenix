@@ -24,6 +24,12 @@ describe( 'Text elements', () => {
     expect( element.textContent ).to.equal( 'foo bar baz' );
   } );
 
+  it( 'Should create text elements without content', () => {
+    const element = new Text();
+
+    expect( text ).to.have.property( 'content', '' );
+  } );
+
   it( 'Should return the text content as node value', () => {
     const element = new Text( 'foo bar baz' );
 
