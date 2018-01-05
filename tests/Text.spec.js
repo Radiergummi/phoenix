@@ -25,9 +25,9 @@ describe( 'Text elements', () => {
   } );
 
   it( 'Should create text elements without content', () => {
-    const element = new Text();
+    const element = new Text;
 
-    expect( text ).to.have.property( 'content', '' );
+    expect( element ).to.have.property( 'content', '' );
   } );
 
   it( 'Should return the text content as node value', () => {
