@@ -290,6 +290,15 @@ describe( 'Nodes', () => {
       expect( root2.hasDescendant( child1 ) ).to.be.false;
       expect( child2.hasDescendant( root1 ) ).to.be.false;
     } );
+
+    it( 'Should find a node by UID using the specialized method', () => {
+      const root  = new Node,
+            child = new Node;
+
+      root.appendChild( child );
+
+      expect( root.getElementByUid( child.uid ) ).to.equal( child );
+    } );
   } );
 
   describe( 'Node meta data', () => {
