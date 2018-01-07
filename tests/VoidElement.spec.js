@@ -11,29 +11,29 @@
 const expect = require( 'chai' ).expect;
 
 const Element          = require( '../lib/document/element/Element' ),
-      ChildlessElement = require( '../lib/document/element/ChildlessElement' );
+      VoidElement = require( '../lib/document/element/VoidElement' );
 
-describe( 'Childless elements', () => {
+describe( 'Void elements', () => {
   it( 'Should inherit from Element', () => {
-    expect( Element.isPrototypeOf( ChildlessElement ) ).to.be.true;
+    expect( Element.isPrototypeOf( VoidElement ) ).to.be.true;
   } );
 
   it( 'Should not append children', () => {
-    const element = new ChildlessElement;
+    const element = new VoidElement;
 
     // noinspection JSCheckFunctionSignatures
     expect( element.appendChild( new Element ) ).to.equal( null );
   } );
 
   it( 'Should not prepend children', () => {
-    const element = new ChildlessElement;
+    const element = new VoidElement;
 
     // noinspection JSCheckFunctionSignatures
     expect( element.prependChild( new Element ) ).to.equal( null );
   } );
 
   it( 'Should not remove children', () => {
-    const element = new ChildlessElement;
+    const element = new VoidElement;
 
     // noinspection JSCheckFunctionSignatures
     expect( element.removeChild( new Element ) ).to.equal( null );
