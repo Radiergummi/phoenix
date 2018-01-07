@@ -18,7 +18,7 @@ describe( 'External link elements', () => {
   it( 'Should create links without initial URL', () => {
     const element = new ExternalLink();
 
-    expect( element.toString() ).to.equal( 'invalid://' );
+    expect( element.toString() ).to.equal( '' );
   } );
 
   it( 'Should bail on creating links to invalid targets', () => {
