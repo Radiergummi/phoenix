@@ -22,7 +22,7 @@ describe( 'Link elements', () => {
     root.appendChild( target );
     root.appendChild( link );
 
-    expect( link.getTarget() ).to.equal( target );
+    expect( link.getAttribute( 'target' ) ).to.equal( target );
   } );
 
   it( 'Should create links for other document nodes by UID', () => {
@@ -35,7 +35,7 @@ describe( 'Link elements', () => {
 
     link.setTarget( target.uid );
 
-    expect( link.getTarget() ).to.equal( target );
+    expect( link.getAttribute( 'target' ) ).to.equal( target );
   } );
 
   it( 'Should bail on wrong UIDs', () => {
@@ -57,6 +57,6 @@ describe( 'Link elements', () => {
     root.appendChild( target );
     root.appendChild( link );
 
-    expect( link ).to.have.property( 'target', target );
+    expect( link.target ).to.equal( target );
   } );
 } );

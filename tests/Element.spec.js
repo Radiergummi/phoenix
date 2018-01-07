@@ -22,41 +22,40 @@ describe( 'Elements', () => {
   it( 'Should guard some attributes', () => {
     // noinspection JSUnresolvedVariable
     expect( Array.from( Element._guardedAttributes ) ).to.include.members( [
-        'appendChild',
-        'attributes',
-        'childElementCount',
-        'constructor',
-        'depth',
-        'find',
-        'firstChild',
-        'getAttribute',
-        'getElementByUid',
-        'getElementsByNodeType',
-        'hasAncestor',
-        'hasAttribute',
-        'hasDescendant',
-        'isRootNode',
-        'lastChild',
-        'length',
-        'name',
-        'nextSibling',
-        'nodeType',
-        'nodeValue',
-        'parentNode',
-        'prependChild',
-        'previousSibling',
-        'remove',
-        'removeAttribute',
-        'removeChild',
-        'rootNode',
-        'setAttribute',
-        'textContent',
-        'toArray',
-        'toString',
-        'traverseDown',
-        'traverseUp'
-      ]
-    );
+      'appendChild',
+      'attributes',
+      'childElementCount',
+      'constructor',
+      'depth',
+      'find',
+      'firstChild',
+      'getAttribute',
+      'getElementByUid',
+      'getElementsByNodeType',
+      'hasAncestor',
+      'hasAttribute',
+      'hasDescendant',
+      'isRootNode',
+      'lastChild',
+      'length',
+      'name',
+      'nextSibling',
+      'nodeType',
+      'nodeValue',
+      'parentNode',
+      'prependChild',
+      'previousSibling',
+      'remove',
+      'removeAttribute',
+      'removeChild',
+      'rootNode',
+      'setAttribute',
+      'textContent',
+      'toArray',
+      'toString',
+      'traverseDown',
+      'traverseUp'
+    ] );
   } );
 
   it( 'Should retrieve the element type name', () => {
@@ -137,7 +136,7 @@ describe( 'Elements', () => {
     element.removeAttribute( 'foo' );
 
     expect( element.foo ).to.be.an( 'undefined' );
-    expect( element.getAttribute( 'foo' ) ).to.be.an( 'undefined' );
+    expect( element.hasAttribute( 'foo' ) ).to.be.false;
   } );
 
   it( 'Should set its textContent', () => {

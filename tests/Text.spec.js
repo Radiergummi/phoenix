@@ -21,7 +21,7 @@ describe( 'Text elements', () => {
   it( 'Should set the text content on construction', () => {
     const element = new Text( 'foo bar baz' );
 
-    expect( element.textContent ).to.equal( 'foo bar baz' );
+    expect( element.content ).to.equal( 'foo bar baz' );
   } );
 
   it( 'Should create text elements without content', () => {
@@ -68,7 +68,7 @@ describe( 'Text elements', () => {
     expect( element.textContent ).to.equal( 'foo bar' );
   } );
 
-  it( 'Should append text', () => {
+  it( 'Should replace text', () => {
     const element = new Text( 'foo' );
 
     expect( element.textContent ).to.equal( 'foo' );
