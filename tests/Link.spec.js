@@ -48,4 +48,15 @@ describe( 'Link elements', () => {
 
     expect( () => link.setTarget( 'foo' ) ).to.throw( TypeError );
   } );
+
+  it( 'Should expose target as an attribute if defined', () => {
+    const root   = new Element,
+          target = new Element,
+          link   = new Link( target );
+
+    root.appendChild( target );
+    root.appendChild( link );
+
+    expect( link ).to.have.property( 'target', target );
+  } );
 } );
