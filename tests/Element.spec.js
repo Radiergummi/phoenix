@@ -24,6 +24,7 @@ describe( 'Elements', () => {
     expect( Array.from( Element._guardedAttributes ) ).to.include.members( [
         'appendChild',
         'attributes',
+        'childElementCount',
         'constructor',
         'depth',
         'find',
