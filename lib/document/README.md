@@ -13,6 +13,133 @@ some basic methods that you may know from browsers: `appendChild`, `removeChild`
 and so on. You can find them [below](#node-api).
 
 
+Elements
+--------
+Elements are abstract document instances that inherit from `Node`. An element is more sophisticated,
+featuring a lot of behaviour from the browser DOM. Elements represent a certain part of a document,
+without going into the specifics on how to actually render them. There are tables, images, links,
+paragraphs and separators, even comments. You can think of them as basic building blocks.    
+There are two special features of elements that make them exceptionally useful:  **Attributes** and 
+**textContent**. 
+
+### Element attributes
+All elements can hold an arbitrary number of attributes, kind of
+meta data for an element. That can be things like a link target, a reference to something or even
+a simple "class" system to group unrelated content together. These attributes are stored within the
+`attributes` property and also directly accessible through the element instance. Consider the 
+following example:
+
+```js
+// creating elements
+const section = new Section(new Paragraph('Foo bar'));
+
+// setting an attribute
+section.setAttribute('foo', 'bar');
+
+console.log(
+  section.getAttribute('foo'),
+	section.foo
+); // "bar" "bar"
+```
+
+#### Guarded element properties
+You might wonder what happens if you define an attribute with the name of an existing element method
+or property - for example "appendChild", or "constructor". To prevent accidentally overwriting these
+reserved properties, they are dynamically guarded (a little reflection magic).  
+Attributes can hold an arbitrary type of data, though it is recommended to use separate attributes
+for separate concerns.
+
+### Text elements and the `textContent` property
+Aside from the usual elements, there is also an element named `Text`. It holds a string of plain 
+text and no further children elements and is exclusively used for text content. These `Text` nodes 
+are the last leaves of our tree, really.  
+Which brings us to the second special Element feature mentioned above: `textContent`. This property
+is a dynamic getter and setter. The getter will scan their children nodes for `Text` elements, read
+their plain text and join them with line breaks. This results in the same thing you know from the 
+DOM: The textual representation of an arbitrarily large document section.  
+The setter will add a new `Text` element to the node without replacing the existing text.  
+This might all sound very abstract, so let's look at an example:
+
+```js
+const section =   new Section,
+			paragraph = new Paragraph('If you are not too long,'); // this sets the text content directly
+
+console.log(section.textContent); // If you are not too long,
+
+section.textContent = 'I will wait here for you all my life.'; // I will wait here for you all my life.
+
+console.log(section.textContent); // If you are not too long,\nI will wait here for you all my life.
+
+section.prependChild(new Text('True friendship stabs you in the front.'));
+
+console.log(section.textContent); // If you are not too long,\nI will wait here for you all my life.\n
+																	// True friendship stabs you in the front.
+```
+
+### Element inheritance
+There is a strict inheritance hierarchy for all elements. In general, the chain looks like this:
+
+```
+[EventEmitter] → [Node] → [Element] → <Element implementation>
+                        ↳ [VoidElement] → <Void Element implementation>  
+                        ↳ [TextElement] → <Text Element implementation>
+```
+
+As you can see, there are three separate element classes:
+
+#### [`Element`](./element/Element.js):  
+Elements are the most capable. They implement the attribute mechanism and can contain children.  
+Most elements inherit from Element, such as [`Section`](./element/Section.js), 
+[`Paragraph`](./element/Paragraph.js) or [`Link`](./element/Link.js).
+
+#### [`VoidElement`](./element/VoidElement.js):
+Void elements are elements with attributes, but without children nodes. Examples of void elements 
+are [`Image`](./element/Image.js) or [`Separator`](./element/Separator.js).
+
+#### [`TextElement`](./element/TextElement.js):
+Text elements are special elements that do not implement attributes and cannot contain children: All
+they do is hold a piece of plain text. Currently, the only text elements are 
+[`Comment`](./element/Comment.js) and [`Text`](./element/Text.js).
+
+
+### Creating new elements
+As with all parts of Phoenix, you can provide additional elements for your own Phoenix setup or as a
+separate module to be installed by Phoenix users. I'd recommend, however, to use existing elements 
+wherever possible; Phoenix ships with a wide range of (output agnostic) elements already. Should
+you require something not possible with the available elements, you are welcome to open an issue or
+provide a PR.  
+If you still want to implement a custom element, keep the following rules in mind: 
+ 1. All elements must be oblivious to the output format. Users should not be restricted to a certain
+    output mode dictated by the structural elements their parser uses.
+ 2. All elements must inherit from the appropriate base class. These exist for a reason - take a 
+    look at [Element inheritance](#element-inheritance) to find the best match for your 
+    requirements. This makes all elements testable since the base classes provide a common interface
+    for other Phoenix modules.
+ 3. No elements may have side effects. Their only task is to hold content or further elements and 
+    describe said content with meta data. If your element is somehow opinionated towards a certain 
+    language, maybe a custom parser would be a better fit.
+
+
+### Working with elements
+Both parsers and transformers receive the main document instance. That is the root node you can work
+with to create a viable documentation.  
+This section gives a little insight on how to actually do so.
+
+#### ...in Parsers
+Parsers have the biggest responsibility here: Ultimately they control which parts of source code are
+worth of documenting and create an appropriate element for them.  
+Usually, you'll have some kind of loop or callback to iterate the source, receiving the individual
+symbols. Let's look at the following pseudo-JS, shall we?
+
+```js
+function parseSourceSymbol() {}
+```
+
+
+#### ...in Transformers
+
+
+
 The `Document` instance
 -----------------------
 A document inherits from `Node`, therefore, all instances have access to the `Node` properties 

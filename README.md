@@ -29,6 +29,12 @@ Contents
 9. [Builds](#builds)
 10. [Attribution](#attribution)
 
+> **A note beforehand:**  
+> This document might look pretty intimidating. This is due to the project currently being in active
+ development, so most of the stuff outlined here is detailed documentation of the inner workings of 
+ Phoenix.  
+> As a user, you can skip straight to [3. Installation](#installation).  
+> As a developer, or someone interested in how Phoenix works, continue on reading...
 
 Abstract Concept
 ----------------
@@ -189,8 +195,8 @@ module.exports = {
 Programmatic Usage
 ------------------
 By default, the only thing required is calling `run()` on a configured Phoenix instance. That will 
-read the input and write documentation output. If you want to customize, whoever, the API is at your
-hands at all times in the build process.
+read the input and write documentation output. If you want to customize the process, however, the 
+API is at your hands at all times in the build process.
 The API is available in two flavors: Either *event based* or *promise based*.
 Every module is obliged to return a promise and emit events at certain points in the flow. You are 
 not bound to one, of course: Promises and events mix just fine.
@@ -214,8 +220,7 @@ phoenix.createDocument('my project title')
 .then(document => phoenix.read(['path1', 'path2']))
 
 // at this point, we have an array of objects that describe all of our source files
-.then(sourceFilesContent => phoenix.parse(sourceFilesContent))
-	
+.then(sourceFilesContent => phoenix.parse(sourceFilesContent));
 ```
 
 Point of the code examples being, you can intervene at any point in the pipeline and do your thing 
