@@ -19,6 +19,19 @@ describe( 'Elements', () => {
     expect( Node.isPrototypeOf( Element ) ).to.be.true;
   } );
 
+  it( 'Should retrieve the number of children elements', () => {
+    const root = new Element,
+          c1   = new Element,
+          c2   = new Element,
+          c3   = new Element;
+
+    root.appendChild( c1 );
+    root.appendChild( c2 );
+    root.appendChild( c3 );
+
+    expect( root.childElementCount ).to.equal( 3 );
+  } );
+
   it( 'Should guard some attributes', () => {
     // noinspection JSUnresolvedVariable
     expect( Array.from( Element._guardedAttributes ) ).to.include.members( [
@@ -106,7 +119,7 @@ describe( 'Elements', () => {
     expect( element.getAttribute( 'foo' ) ).to.equal( 'quz' );
   } );
 
-  it( 'Should allow setting multiple properties at once', () => {
+  it( 'Should allow setting multiple attributes at once', () => {
     const element = new Element;
 
     element.attributes = {
@@ -118,6 +131,12 @@ describe( 'Elements', () => {
     expect( element.foo ).to.equal( 'bar' );
     // noinspection JSUnresolvedVariable
     expect( element.answer ).to.equal( 42 );
+  } );
+
+  it( 'Should return null when retrieving a nonexistent attribute', () => {
+    const element = new Element;
+
+    expect( element.getAttribute( 'foo' ) ).to.be.null;
   } );
 
   it( 'Should bail if a non-object type is passed to the attributes setter', () => {
@@ -137,6 +156,12 @@ describe( 'Elements', () => {
 
     expect( element.foo ).to.be.an( 'undefined' );
     expect( element.hasAttribute( 'foo' ) ).to.be.false;
+  } );
+
+  it( 'Should do nothing on removing a nonexistent attribute', () => {
+    const element = new Element;
+
+    expect( element.removeAttribute( 'foo' ) ).to.be.an( 'undefined' );
   } );
 
   it( 'Should set its textContent', () => {
@@ -207,5 +232,41 @@ describe( 'Elements', () => {
     element.appendChild( new Text( 'baz' ) );
 
     expect( element.toString() ).to.equal( 'foo\nbar\nbaz' );
+  } );
+
+  it( 'Should use dynamic getters if available', () => {
+    class FooElement extends Element {
+      getFoo () {
+        return this.attributes.foo + ' is a foo';
+      }
+    }
+
+    const element = new FooElement();
+
+    element.setAttribute( 'foo', 'test' );
+
+    expect( element.getAttribute( 'foo' ) ).to.equal( 'test is a foo' );
+    expect( element.foo ).to.equal( 'test is a foo' );
+  } );
+
+  it( 'Should use dynamic setters if available', () => {
+    class FooElement extends Element {
+      setFoo ( newFoo ) {
+
+        // naha, you don't
+        if ( newFoo === 'Justin Bieber' ) {
+          this.attributes.foo = 'Jimi Hendrix';
+        } else {
+          this.attributes.foo = newFoo;
+        }
+      }
+    }
+
+    const element = new FooElement();
+
+    element.setAttribute( 'foo', 'Justin Bieber' );
+
+    expect( element.getAttribute( 'foo' ) ).to.equal( 'Jimi Hendrix' );
+    expect( element.foo ).to.equal( 'Jimi Hendrix' );
   } );
 } );

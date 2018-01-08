@@ -42,12 +42,14 @@ console.log(
 ); // "bar" "bar"
 ```
 
+
 #### Guarded element properties
 You might wonder what happens if you define an attribute with the name of an existing element method
 or property - for example "appendChild", or "constructor". To prevent accidentally overwriting these
 reserved properties, they are dynamically guarded (a little reflection magic).  
 Attributes can hold an arbitrary type of data, though it is recommended to use separate attributes
 for separate concerns.
+
 
 ### Text elements and the `textContent` property
 Aside from the usual elements, there is also an element named `Text`. It holds a string of plain 
@@ -75,6 +77,7 @@ section.prependChild(new Text('True friendship stabs you in the front.'));
 console.log(section.textContent); // If you are not too long,\nI will wait here for you all my life.\n
 																	// True friendship stabs you in the front.
 ```
+
 
 ### Element inheritance
 There is a strict inheritance hierarchy for all elements. In general, the chain looks like this:
@@ -125,6 +128,7 @@ Both parsers and transformers receive the main document instance. That is the ro
 with to create a viable documentation.  
 This section gives a little insight on how to actually do so.
 
+
 #### ...in Parsers
 Parsers have the biggest responsibility here: Ultimately they control which parts of source code are
 worth of documenting and create an appropriate element for them.  
@@ -132,8 +136,20 @@ Usually, you'll have some kind of loop or callback to iterate the source, receiv
 symbols. Let's look at the following pseudo-JS, shall we?
 
 ```js
-function parseSourceSymbol() {}
+for (let symbol of symbols) {
+  const symbolSection = new Section();
+  symbolSection.appendChild(new Heading(symbol.name));
+  symbolSection.appendChild(new Paragraph(symbol.description));
+
+  document.appendChild(symbolSection);
+}
 ```
+
+This iterates over all symbols, creating a section for each of them. Those sections hold a heading
+and a paragraph, mapping to the symbol name and description, respectively. This mapping is the most
+interesting thing here: Parsers are free to implement this in more complex terms, using schema 
+objects, for example. An implementation could check the symbol type and create the section from a
+schema that tells it where to put the symbol properties in.
 
 
 #### ...in Transformers
