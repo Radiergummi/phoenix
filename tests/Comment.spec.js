@@ -14,7 +14,7 @@ const Comment     = require( '../lib/document/element/Comment' ),
       TextElement = require( '../lib/document/element/TextElement' );
 
 describe( 'Comment elements', () => {
-  it( 'Should inherit from CommentElement', () => {
+  it( 'Should inherit from TextElement', () => {
     expect( TextElement.isPrototypeOf( Comment ) ).to.be.true;
   } );
 
