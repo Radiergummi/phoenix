@@ -10,7 +10,7 @@
 
 const expect = require( 'chai' ).expect;
 
-const Comment = require( '../lib/document/element/Text' );
+const Comment = require( '../lib/document/element/Comment' );
 
 describe( 'Comment elements', () => {
   it( 'Should preserve line breaks in the content', () => {
