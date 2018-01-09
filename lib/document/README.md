@@ -207,3 +207,14 @@ should expose their content properties directly.
 | `find`                  | `predicate: Node/string/function` | Finds a node by a predicate         |
 | `getElementsByNodeType` | `nodeType: string`                | Retrieves all child nodes of a type |
 | `toArray`               | none                              | Retrieves all child nodes as array  |
+
+
+### Elements
+
+#### Table
+A table element is a little special: It can only directly contain `TableRow` elements. This 
+prevents invalid tables right from the start, so Transformer implementors can consider all tables
+valid.
+
+#### TableRow
+Table rows are the rows of a table, as the name indicates.
