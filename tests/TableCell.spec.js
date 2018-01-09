@@ -10,7 +10,7 @@
 
 const expect = require( 'chai' ).expect;
 
-const Node   = require( '../lib/document/Node' ),
+const Node      = require( '../lib/document/Node' ),
       Table     = require( '../lib/document/element/Table' ),
       TableCell = require( '../lib/document/element/table/TableCell' );
 
@@ -20,15 +20,15 @@ describe( 'Table cell elements', () => {
   } );
 
   it( 'Should permit all nodes as child nodes', () => {
-    expect( TableCell ).to.have.property( 'permittedChildrenNodeType', Node );
+    expect( TableCell ).to.have.property( 'permittedChildrenNodeType', false );
   } );
 
   it( 'Should append nodes', () => {
     const element = new TableCell,
-          node = new Node;
+          node    = new Node;
 
     element.appendChild( node );
 
-    expect( element.firstChild ).to.equal( node );
+    expect( element.hasDescendant( node ) ).to.be.true;
   } );
 } );

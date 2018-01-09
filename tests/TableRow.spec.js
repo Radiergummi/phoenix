@@ -49,4 +49,14 @@ describe( 'Table row elements', () => {
     // noinspection JSCheckFunctionSignatures
     expect( () => element.appendChild( cell ) ).to.throw( TypeError );
   } );
+
+  it( 'Should allow creating a row with children directly', () => {
+    const element = TableRow.withCells( [
+      'foo',
+      'bar',
+      new TableCell( 'baz' )
+    ] );
+
+    expect( element.textContent ).to.equal( 'foo\nbar\nbaz' );
+  } );
 } );
