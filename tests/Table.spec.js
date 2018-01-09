@@ -8,7 +8,7 @@
  it
  */
 
-const expect = require( 'chai' ).expect;
+const { expect } = require( 'chai' );
 
 const Element  = require( '../lib/document/element/Element' ),
       Table    = require( '../lib/document/element/Table' ),
@@ -23,20 +23,27 @@ describe( 'Table elements', () => {
     expect( Table ).to.have.property( 'permittedChildrenNodeType', TableRow );
   } );
 
-  it( 'Should append table rows', () => {
+  it( 'Should add table rows', () => {
     const element = new Table,
-          row     = new TableRow;
+          row1    = new TableRow,
+          row2    = new TableRow;
 
-    element.appendChild( row );
+    element.appendChild( row1 );
+    element.prependChild( row2 );
 
-    expect( element.firstChild ).to.equal( row );
+    expect( element.firstChild ).to.equal( row2 );
+    expect( element.lastChild ).to.equal( row1 );
   } );
 
-  it( 'Should bail on appending other elements than table rows', () => {
+  it( 'Should bail on adding other elements than table rows', () => {
     const element = new Table,
-          row     = new Element;
+          row1    = new Element,
+          row2    = new Element;
 
     // noinspection JSCheckFunctionSignatures
-    expect( () => element.appendChild( row ) ).to.throw( TypeError );
+    expect( () => element.appendChild( row1 ) ).to.throw( TypeError );
+
+    // noinspection JSCheckFunctionSignatures
+    expect( () => element.prependChild( row2 ) ).to.throw( TypeError );
   } );
 } );

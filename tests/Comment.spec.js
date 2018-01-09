@@ -8,7 +8,7 @@
  it
  */
 
-const expect = require( 'chai' ).expect;
+const { expect } = require('chai');
 
 const Comment     = require( '../lib/document/element/Comment' ),
       TextElement = require( '../lib/document/element/TextElement' );
