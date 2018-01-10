@@ -1,4 +1,4 @@
-Phoenix [![Build status](https://teamcity.hades.9dev.de/app/rest/builds/buildType:(id:Phoenix_Build)/statusIcon)](https://teamcity.hades.9dev.de/project.html?projectId=Phoenix&branch_Phoenix=__all_branches__)
+Phoenix [![Build status](https://teamcity.hades.9dev.de/app/rest/builds/buildType:(id:Phoenix_Build)/statusIcon.svg)](https://teamcity.hades.9dev.de/project.html?projectId=Phoenix&branch_Phoenix=__all_branches__)
 =======
 *A lightweight and modular framework to document code projects*
 
